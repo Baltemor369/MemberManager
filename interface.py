@@ -6,7 +6,10 @@ class Interface:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title(APP_NAME)
-        self.root.attributes("-fullscreen", True)
+        # self.root.attributes("-fullscreen", True)
+        self.root.state('zoomed')
+
+        self.root.configure(**ROOT_STYLE)
 
         self.tree = ttk.Treeview(self.root)
 
@@ -35,15 +38,40 @@ class Interface:
         self.tree.heading(MEMBERSHIP_NUMBER, text=STR_MEMBERSHIP_NUMBER, anchor=tk.CENTER)
         self.tree.heading(MEMBERSHIP_ROLE, text=STR_MEMBERSHIP_ROLE, anchor=tk.CENTER)
 
-        self.main()
+        self.main_window()
 
-    def main(self):
-        
-        self.tree.pack()
-        
+    def main_window(self):
+        # clear screen
+        self.clear_window(self.root)
+
         # create a exit button for close the window
-        exit_button = tk.Button(self.root, text=TXT_EXIT_B, command=self.exit, width=10, anchor=tk.CENTER)
-        exit_button.pack(QSDpady=5)
+        frame = tk.Frame(self.root)
+        frame.pack()
+        exit_button = tk.Button(self.root, text=TXT_EXIT, command=self.exit, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        exit_button.pack(pady=5, padx=5, anchor="ne")
+
+        # data table
+        self.tree.pack()
+
+        # add button
+        add_button = tk.Button(self.root, text=TXT_ADD, command=self.add_window, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        add_button.pack(pady=5, padx=5)
+    
+    def add_window(self):
+        # clear screen
+        self.clear_window(self.root)
+
+        # create a exit button for close the window
+        frame = tk.Frame(self.root)
+        frame.pack()
+        back_button = tk.Button(self.root, text=TXT_BACK, command=self.main_window, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        back_button.pack(pady=5, padx=5, anchor="ne")
+
+        tk.Label(self.root, text="Add Window").pack()
+    
+    def clear_window(self, window):
+        for widget in window.winfo_children():
+            widget.pack_forget()
     
     def run(self):
         self.root.mainloop()

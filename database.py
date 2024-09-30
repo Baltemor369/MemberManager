@@ -1,4 +1,5 @@
 import sqlite3 as sq
+from const import *
 
 # Function use to init the database ; create the table
 def create_table(filename:str)->bool:
@@ -6,7 +7,7 @@ def create_table(filename:str)->bool:
         conn = sq.connect(filename)
         cursor = conn.cursor()
         cursor.execute("""
-            CREATE TABLE IF NOT EXISTS members (
+            CREATE TABLE IF NOT EXISTS {TABLE} (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 first_name TEXT NOT NULL,
                 last_name TEXT NOT NULL,
@@ -36,7 +37,7 @@ def create_table(filename:str)->bool:
 def load_data(filename:str)->list:
     conn = sq.connect(filename)
     cursor = conn.cursor()
-    cursor.execute("SELECT * FROM members")
+    cursor.execute("SELECT * FROM {TABLE}")
     data = cursor.fetchall()
     conn.close()
     return data
@@ -46,9 +47,18 @@ def save_data(filename:str, data:list)->bool:
     try:
         conn = sq.connect(filename)
         cursor = conn.cursor()
-        cursor.executemany("INSERT OR IGNORE INTO members VALUES (?, ?, ?)", data)
+        cursor.executemany("INSERT OR IGNORE INTO {TABLE} VALUES (?, ?, ?)", data)
         conn.commit()
         conn.close()
         return True
     except:
         return False
+
+# Function use to select items in the database
+def get_items(filename:str, conditions:str)->list:
+    conn = sq.connect(filename)
+    cursor = conn.cursor()
+    cursor.execute(f"SELECT * FROM {TABLE} WHERE {conditions}")
+    data = cursor.fetchall()
+    conn.close()
+    return data

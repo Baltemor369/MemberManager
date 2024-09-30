@@ -1,6 +1,7 @@
 FILENAME = "members.db"
 APP_NAME="Phar-Est"
 TABLE="members"
+
 # attributs
 ID="id"
 FIRST_NAME="first_name"
@@ -20,7 +21,10 @@ NB_KIDS="nb_kids"
 MEMBERSHIP_NUMBER="membership_number"
 MEMBERSHIP_ROLE="membership_role"
 
-TXT_EXIT_B="Exit"
+# widgets text
+TXT_EXIT="Exit"
+TXT_BACK="Back"
+TXT_ADD="Add"
 
 # String
 STR_ID="Id"
@@ -43,6 +47,10 @@ STR_MEMBERSHIP_ROLE="Membership role"
 
 # design
 BUTTON_STYLE = {
-    "bg":"",
-    "fg":"" 
+    "bg":"#333333",
+    "fg":"#EFEFEF" 
+}
+
+ROOT_STYLE = {
+    "bg":"#ABABAB"
 }
