@@ -1,44 +1,34 @@
 import tkinter as tk
+import re
 from tkinter import ttk
 from const import *
+from User import User
+from database import Database
 
 class Interface:
     def __init__(self):
         self.root = tk.Tk()
         self.root.title(APP_NAME)
-        # self.root.attributes("-fullscreen", True)
+        
         self.root.state('zoomed')
 
         self.root.configure(**ROOT_STYLE)
 
         self.session_state = {}
+        self.session_state[KEY_ALERT] = ("", None)
 
         self.tree = ttk.Treeview(self.root)
 
-        self.tree["columns"] = (FIRST_NAME, LAST_NAME, GENDER, BIRTHDAY, START_SUBSCRIBE, END_SUBSCRIBE, ADDRESS, CITY, ZIPCODE, EMAIL, PHONE, JOB, RELATIONSHIP_SITUATION, NB_KIDS,MEMBERSHIP_NUMBER, MEMBERSHIP_ROLE)
-        # Définir les colonnes
-        self.tree.column("#0", width=0)
-        for col in self.tree["columns"]:
-            self.tree.column(col, anchor=tk.CENTER, width=80)
+        user = User("John", "Doe", "M", "1990-01-01", "2023-01-01", "2024-01-01", "123 Main St", "City", "12345", "john.doe@example.com", "1234567890", "Engineer", "Single", 0, "123456", "Member")
+        attributes = list(user.__dict__.keys())
 
-        # Définir les en-têtes
+        self.tree["columns"] = attributes
+        # Définir les colonnes & entêtes
+        self.tree.column("#0", width=0)
         self.tree.heading("#0", text="", anchor=tk.CENTER)
-        self.tree.heading(FIRST_NAME, text=STR_FIRST_NAME, anchor=tk.CENTER)
-        self.tree.heading(LAST_NAME, text=STR_LAST_NAME, anchor=tk.CENTER)
-        self.tree.heading(GENDER, text=STR_GENDER, anchor=tk.CENTER)
-        self.tree.heading(BIRTHDAY, text=STR_BIRTHDAY, anchor=tk.CENTER)
-        self.tree.heading(START_SUBSCRIBE, text=STR_START_SUBSCRIBE, anchor=tk.CENTER)
-        self.tree.heading(END_SUBSCRIBE, text=STR_END_SUBSCRIBE, anchor=tk.CENTER)
-        self.tree.heading(ADDRESS, text=STR_ADDRESS, anchor=tk.CENTER)
-        self.tree.heading(CITY, text=STR_CITY, anchor=tk.CENTER)
-        self.tree.heading(ZIPCODE, text=STR_ZIPCODE, anchor=tk.CENTER)
-        self.tree.heading(EMAIL, text=STR_EMAIL, anchor=tk.CENTER)
-        self.tree.heading(PHONE, text=STR_PHONE, anchor=tk.CENTER)
-        self.tree.heading(JOB, text=STR_JOB, anchor=tk.CENTER)
-        self.tree.heading(RELATIONSHIP_SITUATION, text=STR_RELATIONSHIP_SITUATION, anchor=tk.CENTER)
-        self.tree.heading(NB_KIDS, text=STR_NB_KIDS, anchor=tk.CENTER)
-        self.tree.heading(MEMBERSHIP_NUMBER, text=STR_MEMBERSHIP_NUMBER, anchor=tk.CENTER)
-        self.tree.heading(MEMBERSHIP_ROLE, text=STR_MEMBERSHIP_ROLE, anchor=tk.CENTER)
+        for col in attributes:
+            self.tree.column(col, anchor=tk.CENTER, width=80)
+            self.tree.heading(col, text=col.replace("_"," "), anchor=tk.CENTER)
 
         self.main_window()
 
@@ -51,6 +41,15 @@ class Interface:
         frame.pack()
         exit_button = tk.Button(self.root, text=TXT_EXIT, command=self.exit, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
         exit_button.pack(pady=5, padx=5, anchor="ne")
+
+        # Alert Frame to display a specific message
+        alert_frame = tk.Frame(self.root, **ROOT_STYLE)
+        alert_frame.pack(padx=10, pady=10)
+
+        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ROOT_STYLE)
+        alert_label.pack(pady=5)
+
+        # update tree data
 
         # data table
         self.tree.pack()
@@ -69,6 +68,13 @@ class Interface:
         back_button = tk.Button(self.root, text=TXT_BACK, command=self.main_window, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
         back_button.pack(pady=5, padx=5, anchor="ne")
 
+        # Alert Frame to display a specific message
+        alert_frame = tk.Frame(self.root, **ROOT_STYLE)
+        alert_frame.pack(padx=10, pady=10)
+
+        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ROOT_STYLE)
+        alert_label.pack(pady=5)
+
         # main Frame
         frame_body = tk.Frame(self.root, **ROOT_STYLE)
         frame_body.pack(padx=10, pady=10)
@@ -78,81 +84,112 @@ class Interface:
         frameTL.pack(side="left", padx=15)
 
         tk.Label(frameTL, text="Prénom", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_FIRST_NAME] = tk.Entry(frameTL)
-        self.session_state[STR_FIRST_NAME].pack(pady=5)
-        
-        tk.Label(frameTL, text="Nom", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_LAST_NAME] = tk.Entry(frameTL)
-        self.session_state[STR_LAST_NAME].pack(pady=5)
-        
-        tk.Label(frameTL, text="Sexe", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_GENDER] = tk.Entry(frameTL)
-        self.session_state[STR_GENDER].pack(pady=5)
-        
-        tk.Label(frameTL, text="Date Anniversaire", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_BIRTHDAY] = tk.Entry(frameTL)
-        self.session_state[STR_BIRTHDAY].pack(pady=5)
+        first_name_entry = tk.Entry(frameTL)
+        first_name_entry.pack(pady=5)
 
-        # Contact
+        tk.Label(frameTL, text="Nom", **ROOT_STYLE).pack(pady=5)
+        last_name_entry = tk.Entry(frameTL)
+        last_name_entry.pack(pady=5)
+
+        tk.Label(frameTL, text="Sexe", **ROOT_STYLE).pack(pady=5)
+        gender_entry = tk.Entry(frameTL)
+        gender_entry.pack(pady=5)
+
+        tk.Label(frameTL, text="Date Anniversaire", **ROOT_STYLE).pack(pady=5)
+        birthday_entry = tk.Entry(frameTL)
+        birthday_entry.pack(pady=5)
+
+        # Informations de Contact
         frameTR = tk.LabelFrame(frame_body, text="Informations de Contact", **ROOT_STYLE)
         frameTR.pack(side="left", padx=15)
 
         tk.Label(frameTR, text="Adresse Postale", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_ADDRESS] = tk.Entry(frameTR)
-        self.session_state[STR_ADDRESS].pack(pady=5)
-        
+        address_entry = tk.Entry(frameTR)
+        address_entry.pack(pady=5)
+
         tk.Label(frameTR, text="Ville", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_CITY] = tk.Entry(frameTR)
-        self.session_state[STR_CITY].pack(pady=5)
-        
+        city_entry = tk.Entry(frameTR)
+        city_entry.pack(pady=5)
+
         tk.Label(frameTR, text="Code Postal", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_ZIPCODE] = tk.Entry(frameTR)
-        self.session_state[STR_ZIPCODE].pack(pady=5)
-        
+        zipcode_entry = tk.Entry(frameTR)
+        zipcode_entry.pack(pady=5)
+
         tk.Label(frameTR, text="Email", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_EMAIL] = tk.Entry(frameTR)
-        self.session_state[STR_EMAIL].pack(pady=5)
-        
+        email_entry = tk.Entry(frameTR)
+        email_entry.pack(pady=5)
+
         tk.Label(frameTR, text="Téléphone", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_PHONE] = tk.Entry(frameTR)
-        self.session_state[STR_PHONE].pack(pady=5)
-        
+        phone_entry = tk.Entry(frameTR)
+        phone_entry.pack(pady=5)
+
         # Situation
         frameBL = tk.LabelFrame(frame_body, text="Situation", **ROOT_STYLE)
         frameBL.pack(side="left", padx=15)
 
         tk.Label(frameBL, text="Métier", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_JOB] = tk.Entry(frameBL)
-        self.session_state[STR_JOB].pack(pady=5)
-        
-        tk.Label(frameBL, text="Situation familiale", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_RELATIONSHIP_SITUATION] = tk.Entry(frameBL)
-        self.session_state[STR_RELATIONSHIP_SITUATION].pack(pady=5)
-        
-        tk.Label(frameBL, text="Nombre d'enfant", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_NB_KIDS] = tk.Entry(frameBL)
-        self.session_state[STR_NB_KIDS].pack(pady=5)
+        job_entry = tk.Entry(frameBL)
+        job_entry.pack(pady=5)
 
-        # Information about Association
+        tk.Label(frameBL, text="Situation familiale", **ROOT_STYLE).pack(pady=5)
+        relationship_situation_entry = tk.Entry(frameBL)
+        relationship_situation_entry.pack(pady=5)
+
+        tk.Label(frameBL, text="Nombre d'enfant", **ROOT_STYLE).pack(pady=5)
+        nb_kids_entry = tk.Entry(frameBL)
+        nb_kids_entry.pack(pady=5)
+
+        # Information dans l'association
         frameBR = tk.LabelFrame(frame_body, text="Information dans l'association", **ROOT_STYLE)
         frameBR.pack(side="left", padx=15)
 
         tk.Label(frameBR, text="N°adhérent", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_MEMBERSHIP_NUMBER] = tk.Entry(frameBR)
-        self.session_state[STR_MEMBERSHIP_NUMBER].pack(pady=5)
-        
+        membership_number_entry = tk.Entry(frameBR)
+        membership_number_entry.pack(pady=5)
+
         tk.Label(frameBR, text="Rôle", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_MEMBERSHIP_ROLE] = tk.Entry(frameBR)
-        self.session_state[STR_MEMBERSHIP_ROLE].pack(pady=5)
-                
+        membership_role_entry = tk.Entry(frameBR)
+        membership_role_entry.pack(pady=5)
+
         tk.Label(frameBR, text="Date d'inscription", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_START_SUBSCRIBE] = tk.Entry(frameBR)
-        self.session_state[STR_START_SUBSCRIBE].pack(pady=5)
-        
+        start_suscription_entry = tk.Entry(frameBR)
+        start_suscription_entry.pack(pady=5)
+
         tk.Label(frameBR, text="Date de sortie", **ROOT_STYLE).pack(pady=5)
-        self.session_state[STR_END_SUBSCRIBE] = tk.Entry(frameBR)
-        self.session_state[STR_END_SUBSCRIBE].pack(pady=5)
-        
+        end_suscription_entry = tk.Entry(frameBR)
+        end_suscription_entry.pack(pady=5)
+
+        # get inputs from Entry to init a User Object and send it to the self.add_client function
+        tk.Button(self.root, text=TXT_ADD, command=lambda : self.add_client( User(
+            first_name_entry.get(),
+            last_name_entry.get(),
+            gender_entry.get(),
+            birthday_entry.get(),
+            address_entry.get(),
+            city_entry.get(),
+            zipcode_entry.get(),
+            email_entry.get(),
+            phone_entry.get(),
+            job_entry.get(),
+            relationship_situation_entry.get(),
+            nb_kids_entry.get(),
+            membership_number_entry.get(),
+            membership_role_entry.get(),
+            start_suscription_entry.get(),
+            end_suscription_entry.get()
+            )
+        )).pack(pady=5)
+
+    def add_client(self, user:User):
+        print(user.first_name)
+
+        # verify inputs format
+        # check person doesn't already exist
+        # add the person to the database
+
+        # All succeeded, return to the main menu
+        self.session_state[KEY_ALERT] = ("Person successfully added", GREEN)
+        self.main_window()
         
     
     def clear_window(self, window):
