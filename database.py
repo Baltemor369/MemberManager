@@ -67,16 +67,19 @@ class Database:
         conn.close()
         return data
 
-    def insert_user(self, conn, user):
+    def insert_user(self, user):
+        conn = sq.connect(self.filename)
         cursor = conn.cursor()
         cursor.execute("""
             INSERT INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role))
         conn.commit()
+        conn.close()
 
-    def delete_user(self, conn, user_id):
+    def delete_user(self, user_id):
         try:
+            conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute("DELETE FROM {TABLE} WHERE id = ?", (user_id,))
             conn.commit()
@@ -84,3 +87,6 @@ class Database:
         except sq.Error as error:
             print("Erreur lors de la suppression de l'utilisateur :", error)
             return False
+        finally:
+            if conn:
+                conn.close()

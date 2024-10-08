@@ -1,9 +1,9 @@
 import tkinter as tk
 import re
+import datetime
 from tkinter import ttk
 from const import *
 from User import User
-from database import Database
 
 class Interface:
     def __init__(self):
@@ -46,7 +46,7 @@ class Interface:
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
 
-        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ROOT_STYLE)
+        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
         alert_label.pack(pady=5)
 
         # update tree data
@@ -72,8 +72,8 @@ class Interface:
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
 
-        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ROOT_STYLE)
-        alert_label.pack(pady=5)
+        self.alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
+        self.alert_label.pack(pady=5)
 
         # main Frame
         frame_body = tk.Frame(self.root, **ROOT_STYLE)
@@ -83,16 +83,16 @@ class Interface:
         frameTL = tk.LabelFrame(frame_body, text="Informations personnelle", **ROOT_STYLE)
         frameTL.pack(side="left", padx=15)
 
-        tk.Label(frameTL, text="Prénom", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTL, text="Prénom", **LABEL_STYLE).pack(pady=5)
         first_name_entry = tk.Entry(frameTL)
         first_name_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Nom", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTL, text="Nom", **LABEL_STYLE).pack(pady=5)
         last_name_entry = tk.Entry(frameTL)
         last_name_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Sexe", **ROOT_STYLE).pack(pady=5)
-        gender_entry = tk.Entry(frameTL)
+        tk.Label(frameTL, text="Sexe", **LABEL_STYLE).pack(pady=5)
+        gender_entry = ttk.Combobox(frameTL, values=LIST_GENDER)
         gender_entry.pack(pady=5)
 
         tk.Label(frameTL, text="Date Anniversaire", **ROOT_STYLE).pack(pady=5)
@@ -103,23 +103,23 @@ class Interface:
         frameTR = tk.LabelFrame(frame_body, text="Informations de Contact", **ROOT_STYLE)
         frameTR.pack(side="left", padx=15)
 
-        tk.Label(frameTR, text="Adresse Postale", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTR, text="Adresse Postale", **LABEL_STYLE).pack(pady=5)
         address_entry = tk.Entry(frameTR)
         address_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Ville", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTR, text="Ville", **LABEL_STYLE).pack(pady=5)
         city_entry = tk.Entry(frameTR)
         city_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Code Postal", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTR, text="Code Postal", **LABEL_STYLE).pack(pady=5)
         zipcode_entry = tk.Entry(frameTR)
         zipcode_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Email", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTR, text="Email", **LABEL_STYLE).pack(pady=5)
         email_entry = tk.Entry(frameTR)
         email_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Téléphone", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTR, text="Téléphone", **LABEL_STYLE).pack(pady=5)
         phone_entry = tk.Entry(frameTR)
         phone_entry.pack(pady=5)
 
@@ -127,35 +127,37 @@ class Interface:
         frameBL = tk.LabelFrame(frame_body, text="Situation", **ROOT_STYLE)
         frameBL.pack(side="left", padx=15)
 
-        tk.Label(frameBL, text="Métier", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameBL, text="Métier", **LABEL_STYLE).pack(pady=5)
         job_entry = tk.Entry(frameBL)
         job_entry.pack(pady=5)
 
-        tk.Label(frameBL, text="Situation familiale", **ROOT_STYLE).pack(pady=5)
-        relationship_situation_entry = tk.Entry(frameBL)
+        tk.Label(frameBL, text="Situation familiale", **LABEL_STYLE).pack(pady=5)
+        relationship_situation_entry = ttk.Combobox(frameBL, values=LIST_RELATIONSHIP)
         relationship_situation_entry.pack(pady=5)
 
-        tk.Label(frameBL, text="Nombre d'enfant", **ROOT_STYLE).pack(pady=5)
-        nb_kids_entry = tk.Entry(frameBL)
+        tk.Label(frameBL, text="Nombre d'enfant", **LABEL_STYLE).pack(pady=5)
+        nb_kids_entry = ttk.Combobox(frameBL, values=LIST_ROLE)
         nb_kids_entry.pack(pady=5)
 
         # Information dans l'association
         frameBR = tk.LabelFrame(frame_body, text="Information dans l'association", **ROOT_STYLE)
         frameBR.pack(side="left", padx=15)
 
-        tk.Label(frameBR, text="N°adhérent", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameBR, text="N°adhérent", **LABEL_STYLE).pack(pady=5)
         membership_number_entry = tk.Entry(frameBR)
         membership_number_entry.pack(pady=5)
 
-        tk.Label(frameBR, text="Rôle", **ROOT_STYLE).pack(pady=5)
-        membership_role_entry = tk.Entry(frameBR)
+        tk.Label(frameBR, text="Rôle", **LABEL_STYLE).pack(pady=5)
+        membership_role_entry = tk.Listbox(frameBR, selectmode='single')
+        for elt in LIST_ROLE:
+            membership_role_entry.insert(tk.END, elt)
         membership_role_entry.pack(pady=5)
 
-        tk.Label(frameBR, text="Date d'inscription", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameBR, text="Date d'inscription", **LABEL_STYLE).pack(pady=5)
         start_suscription_entry = tk.Entry(frameBR)
         start_suscription_entry.pack(pady=5)
 
-        tk.Label(frameBR, text="Date de sortie", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameBR, text="Date de sortie", **LABEL_STYLE).pack(pady=5)
         end_suscription_entry = tk.Entry(frameBR)
         end_suscription_entry.pack(pady=5)
 
@@ -181,23 +183,65 @@ class Interface:
         )).pack(pady=5)
 
     def add_client(self, user:User):
-        print(user.first_name)
 
-        # verify inputs format
+        ## verify inputs format
+        # check firstname and lastname is only with letters
+        if not user.first_name.isalpha() or not user.last_name.isalpha():
+            self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        #check gender : H/F
+        if user.gender not in LIST_GENDER:
+            self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        # check birthday format : YYYY-MM-DD
+        try:
+            datetime.strptime(user.birthday, "%d-%m-%Y")
+        except :
+            self.session_state[KEY_ALERT] = (MSG_INVALID_BIRTHDAY, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        # check date start & end subscribe
+        try:
+            datetime.strptime(user.start_suscription, "%d-%m-%Y")
+            datetime.strptime(user.end_suscription, "%d-%m-%Y")
+        except :
+            self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        # check zipcode : 5 digits
+        if len(user.zipcode)!= 5 or not user.zipcode.isdigit():
+            self.session_state[KEY_ALERT] = (MSG_INVALID_ZIPCODE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        # check email format : valid email
+        if not re.match(EMAIL_REGEX, user.email):
+            self.session_state[KEY_ALERT] = (MSG_INVALID_EMAIL, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        # check phone number format : 10 digits
+        if len(user.phone)!= 10 or not user.phone.isdigit():
+            self.session_
+
+
+        
         # check person doesn't already exist
         # add the person to the database
 
         # All succeeded, return to the main menu
-        self.session_state[KEY_ALERT] = ("Person successfully added", GREEN)
+        self.session_state[KEY_ALERT] = (MSG_ADD_SUCCESS, GREEN)
         self.main_window()
         
-    
+    # undisplay widgets in window (not destroy)
     def clear_window(self, window):
         for widget in window.winfo_children():
             widget.pack_forget()
     
+    # start the main application loop
     def run(self):
         self.root.mainloop()
     
+    # exit the app and all other process need to be stop separately
     def exit(self):
         self.root.quit()

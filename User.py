@@ -1,5 +1,5 @@
 class User:
-    def __init__(self, first_name, last_name, gender, birthday, start_suscription, end_suscription, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role):
+    def __init__(self, first_name:str, last_name:str, gender:str, birthday:str, start_suscription:str, end_suscription:str, address:str, city:str, zipcode:str, email:str, phone:str, job:str, relationship_situation:str, nb_kids:str, membership_number:str, membership_role:str):
         self.first_name = first_name
         self.last_name = last_name
         self.gender = gender
