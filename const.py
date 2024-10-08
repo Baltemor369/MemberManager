@@ -55,7 +55,7 @@ LIST_ROLE = ["Inscript","Administration"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)"]
 
 # Regex
-# REGEX_EMAIL = 
+REGEX_EMAIL = ""
 
 # Key
 KEY_ALERT="Alert"

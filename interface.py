@@ -93,6 +93,7 @@ class Interface:
 
         tk.Label(frameTL, text="Sexe", **LABEL_STYLE).pack(pady=5)
         gender_entry = ttk.Combobox(frameTL, values=LIST_GENDER)
+        gender_entry.current(0)
         gender_entry.pack(pady=5)
 
         tk.Label(frameTL, text="Date Anniversaire", **ROOT_STYLE).pack(pady=5)
@@ -133,10 +134,12 @@ class Interface:
 
         tk.Label(frameBL, text="Situation familiale", **LABEL_STYLE).pack(pady=5)
         relationship_situation_entry = ttk.Combobox(frameBL, values=LIST_RELATIONSHIP)
+        relationship_situation_entry.current(0)
         relationship_situation_entry.pack(pady=5)
 
         tk.Label(frameBL, text="Nombre d'enfant", **LABEL_STYLE).pack(pady=5)
         nb_kids_entry = ttk.Combobox(frameBL, values=LIST_ROLE)
+        nb_kids_entry.current(0)
         nb_kids_entry.pack(pady=5)
 
         # Information dans l'association
@@ -148,9 +151,8 @@ class Interface:
         membership_number_entry.pack(pady=5)
 
         tk.Label(frameBR, text="Rôle", **LABEL_STYLE).pack(pady=5)
-        membership_role_entry = tk.Listbox(frameBR, selectmode='single')
-        for elt in LIST_ROLE:
-            membership_role_entry.insert(tk.END, elt)
+        membership_role_entry = ttk.Combobox(frameBR, valeus=LIST_ROLE)
+        membership_role_entry.current(0)
         membership_role_entry.pack(pady=5)
 
         tk.Label(frameBR, text="Date d'inscription", **LABEL_STYLE).pack(pady=5)
@@ -195,7 +197,7 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
-        # check birthday format : YYYY-MM-DD
+        # check birthday format : DD-MM-YYYY
         try:
             datetime.strptime(user.birthday, "%d-%m-%Y")
         except :
@@ -216,15 +218,10 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         # check email format : valid email
-        if not re.match(EMAIL_REGEX, user.email):
+        if not re.match(REGEX_EMAIL, user.email):
             self.session_state[KEY_ALERT] = (MSG_INVALID_EMAIL, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
-        # check phone number format : 10 digits
-        if len(user.phone)!= 10 or not user.phone.isdigit():
-            self.session_
-
-
         
         # check person doesn't already exist
         # add the person to the database
