@@ -15,7 +15,7 @@ class Database:
                     gender TEXT NOT NULL,
                     birthday DATE NOT NULL,
                     start_subscribe_date DATE NOT NULL,
-                    end_subscribe_date DATE,
+                    end_subscribe_date DATE NOT NULL,
                     address TEXT NOT NULL,
                     city TEXT NOT NULL,
                     zipcode INTEGER NOT NULL,

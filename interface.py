@@ -41,15 +41,18 @@ class Interface:
         # create a exit button for close the window
         frame = tk.Frame(self.root)
         frame.pack()
-        exit_button = tk.Button(self.root, text=TXT_EXIT, command=self.exit, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        exit_button = tk.Button(self.root, text=TXT_EXIT, command=self.exit, anchor=tk.CENTER, **BUTTON_STYLE)
         exit_button.pack(pady=5, padx=5, anchor="ne")
 
         # Alert Frame to display a specific message
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
 
-        alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
-        alert_label.pack(pady=5)
+        self.alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
+        self.alert_label.pack(pady=5)
+
+        # clear treeview data
+        self.tree.delete(*self.tree.get_children())
 
         # update tree data
         for elt in self.db.load_data():
@@ -59,8 +62,12 @@ class Interface:
         self.tree.pack()
 
         # add button
-        add_button = tk.Button(self.root, text=TXT_ADD, command=self.add_window, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        add_button = tk.Button(self.root, text=TXT_ADD, command=self.add_window, anchor=tk.CENTER, **BUTTON_STYLE)
         add_button.pack(pady=5, padx=5)
+        
+        # del button
+        del_button = tk.Button(self.root, text=TXT_DEL, command=self.del_client, anchor=tk.CENTER, **BUTTON_STYLE)
+        del_button.pack(pady=5, padx=5)
     
     def add_window(self):
         # clear screen
@@ -69,13 +76,15 @@ class Interface:
         # create a exit button for close the window
         frame = tk.Frame(self.root)
         frame.pack()
-        back_button = tk.Button(self.root, text=TXT_BACK, command=self.back, width=10, anchor=tk.CENTER, **BUTTON_STYLE)
+        back_button = tk.Button(self.root, text=TXT_BACK, command=self.back, anchor=tk.CENTER, **BUTTON_STYLE)
         back_button.pack(pady=5, padx=5, anchor="ne")
 
         # Alert Frame to display a specific message
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
-
+        
+        self.session_state[KEY_ALERT]=("","#000000")
+        
         self.alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
         self.alert_label.pack(pady=5)
 
@@ -100,7 +109,7 @@ class Interface:
         gender_entry.current(0)
         gender_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Date Anniversaire", **ROOT_STYLE).pack(pady=5)
+        tk.Label(frameTL, text="Date Anniversaire", **LABEL_STYLE).pack(pady=5)
         birthday_entry = tk.Entry(frameTL)
         birthday_entry.pack(pady=5)
 
@@ -169,27 +178,30 @@ class Interface:
 
         # get inputs from Entry to init a User Object and send it to the self.add_client function
         tk.Button(self.root, text=TXT_ADD, command=lambda : self.add_client( User(
-            first_name_entry.get(),
-            last_name_entry.get(),
-            gender_entry.get(),
-            birthday_entry.get(),
-            address_entry.get(),
-            city_entry.get(),
-            zipcode_entry.get(),
-            email_entry.get(),
-            phone_entry.get(),
-            job_entry.get(),
-            relationship_situation_entry.get(),
-            nb_kids_entry.get(),
-            membership_number_entry.get(),
-            membership_role_entry.get(),
-            start_suscription_entry.get(),
-            end_suscription_entry.get()
+            first_name=first_name_entry.get(),
+            last_name=last_name_entry.get(),
+            gender=gender_entry.get(),
+            birthday=birthday_entry.get(),
+            address=address_entry.get(),
+            city=city_entry.get(),
+            zipcode=zipcode_entry.get(),
+            email=email_entry.get(),
+            phone=phone_entry.get(),
+            job=job_entry.get(),
+            relationship_situation=relationship_situation_entry.get(),
+            nb_kids=nb_kids_entry.get(),
+            membership_number=membership_number_entry.get(),
+            membership_role=membership_role_entry.get(),
+            start_suscription=start_suscription_entry.get(),
+            end_suscription=end_suscription_entry.get()
             )
-        )).pack(pady=5)
-
+        ), **BUTTON_STYLE).pack(pady=5)
+        
     # Get & Verify inputs, if all rights, it's added to the database
     def add_client(self, user:User):
+        if user is None:
+            return
+
         ## verify inputs format
         # check firstname and lastname is only with letters
         if not user.first_name.isalpha() or not user.last_name.isalpha():
@@ -203,17 +215,22 @@ class Interface:
             return
         # check birthday format : DD-MM-YYYY
         try:
-            datetime.datetime.strptime(user.birthday, "%d-%m-%Y")
+            datetime.datetime.strptime(user.birthday, "%d/%m/%Y")
         except:
             self.session_state[KEY_ALERT] = (MSG_INVALID_BIRTHDAY, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         # check date start & end subscribe
         try:
-            datetime.datetime.strptime(user.start_suscription, "%d-%m-%Y")
-            datetime.datetime.strptime(user.end_suscription, "%d-%m-%Y")
+            datetime.datetime.strptime(user.start_suscription, "%d/%m/%Y")
         except :
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        try:
+            datetime.datetime.strptime(user.end_suscription, "%d/%m/%Y")
+        except :
+            self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         # check address not empty
@@ -265,13 +282,29 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_INVALID_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
+        # check email with a regex
+        if re.search(REGEX_EMAIL, user.membership_number):
+            self.session_state[KEY_ALERT] = (MSG_INVALID_MEMBERSHIP, RED)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
         
         # add the person to the database
         self.db.save_data(user.__list__())
 
+        user = None
         # All succeeded, return to the main menu
         self.session_state[KEY_ALERT] = (MSG_ADD_SUCCESS, GREEN)
         self.main_window()
+    
+    def del_client(self):
+        if not self.tree.selection():
+            self.session_state[KEY_ALERT] = (MSG_NO_SELECTION, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return 
+        selected_item = self.tree.selection()[0]
+        item = self.tree.item(selected_item)
+        print(item["values"])
+        # self.tree.delete(selected_item)
         
     # undisplay widgets in window (not destroy)
     def clear_window(self, window):
