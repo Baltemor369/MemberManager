@@ -7,7 +7,7 @@ class Database:
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(f"""
                 CREATE TABLE IF NOT EXISTS {TABLE} (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     first_name TEXT NOT NULL,
@@ -19,20 +19,18 @@ class Database:
                     address TEXT NOT NULL,
                     city TEXT NOT NULL,
                     zipcode INTEGER NOT NULL,
-                    email TEXT NOT NULL,
-                    phone TEXT NOT NULL,
+                    email TEXT NOT NULL UNIQUE,
+                    phone TEXT NOT NULL UNIQUE,
                     job TEXT NOT NULL,
                     relationship_situation TEXT NOT NULL,
                     nb_kids INTEGER NOT NULL,
-                    membership_number TEXT NOT NULL,
+                    membership_number TEXT NOT NULL UNIQUE,
                     membership_role TEXT NOT NULL
                 )
             """)
             conn.commit()
-            return True
         except sq.Error as e:
             print(f"An error occurred: {e}")
-            return False
         finally:
             if conn:
                 conn.close()
@@ -41,17 +39,20 @@ class Database:
     def load_data(self)->list:
         conn = sq.connect(self.filename)
         cursor = conn.cursor()
-        cursor.execute("SELECT * FROM {TABLE}")
+        cursor.execute(f"SELECT * FROM {TABLE}")
         data = cursor.fetchall()
         conn.close()
         return data
 
     # Function use to save data into the database
-    def save_data(self, filename:str, data:list)->bool:
+    def save_data(self, data:list)->bool:
         try:
-            conn = sq.connect(filename)
+            conn = sq.connect(self.filename)
             cursor = conn.cursor()
-            cursor.executemany("INSERT OR IGNORE INTO {TABLE} VALUES (?, ?, ?)", data)
+            cursor.execute(f"""
+                INSERT OR IGNORE INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, data)
             conn.commit()
             conn.close()
             return True
@@ -59,8 +60,8 @@ class Database:
             return False
 
     # Function use to select items in the database
-    def get_items(self, filename:str, conditions:str)->list:
-        conn = sq.connect(filename)
+    def get_items(self, conditions:str)->list:
+        conn = sq.connect(self.filename)
         cursor = conn.cursor()
         cursor.execute(f"SELECT * FROM {TABLE} WHERE {conditions}")
         data = cursor.fetchall()
@@ -70,23 +71,39 @@ class Database:
     def insert_user(self, user):
         conn = sq.connect(self.filename)
         cursor = conn.cursor()
-        cursor.execute("""
+        cursor.execute(f"""
             INSERT INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role))
         conn.commit()
         conn.close()
 
-    def delete_user(self, user_id):
+    def delete_user(self, user_id)->bool:
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
-            cursor.execute("DELETE FROM {TABLE} WHERE id = ?", (user_id,))
+            cursor.execute(f"DELETE FROM {TABLE} WHERE id = ?", (user_id,))
             conn.commit()
+            if conn:
+                conn.close()
             return True
         except sq.Error as error:
             print("Erreur lors de la suppression de l'utilisateur :", error)
-            return False
-        finally:
             if conn:
                 conn.close()
+            return False
+            
+    
+    def generer_identifiant()->str:
+        conn = sq.connect('membres.db')
+        cursor = conn.cursor()
+        cursor.execute(f'SELECT {MEMBERSHIP_NUMBER} FROM {TABLE}')
+        ids = cursor.fetchall()
+        conn.close()
+
+        if not ids:
+            return '0001'
+        else:
+            ids = [int(id[0]) for id in ids]
+            new_id = max(ids) + 1
+            return f'{new_id:04d}'
