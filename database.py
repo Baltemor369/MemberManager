@@ -78,7 +78,7 @@ class Database:
         conn.commit()
         conn.close()
 
-    def delete_user(self, user_id)->bool:
+    def delete_user(self, user_id:str)->bool:
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
@@ -92,6 +92,17 @@ class Database:
             if conn:
                 conn.close()
             return False
+    
+    def update_user(self, user):
+        conn = sq.connect(self.filename)
+        cursor = conn.cursor()
+        cursor.execute(f"""
+            UPDATE {TABLE}
+            SET first_name =?, last_name =?, gender =?, birthday =?, start_subscribe_date =?, end_subscribe_date =?, address =?, city =?, zipcode =?, email =?, phone =?, job =?, relationship_situation =?, nb_kids =?, membership_number =?, membership_role =?
+            WHERE id =?
+        """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role, user.id))
+        conn.commit()
+        conn.close()
             
     
     def generer_identifiant()->str:

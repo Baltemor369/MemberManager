@@ -22,8 +22,8 @@ FIRST_NAME="Prenom"
 LAST_NAME="nom"
 GENDER="Genre"
 BIRTHDAY="Anniversaire"
-START_SUBSCRIBE="date inscription"
-END_SUBSCRIBE="date expiration"
+START_SUSCRIPTION="date inscription"
+END_SUSCRIPTION="date expiration"
 ADDRESS="Adresse"
 CITY="Ville"
 ZIPCODE="Code postal"
@@ -35,8 +35,15 @@ NB_KIDS="Nb enfants"
 MEMBERSHIP_NUMBER="Identifiant"
 MEMBERSHIP_ROLE="Role"
 
+# Values
+VAL_EMPTY=""
+VAL_ADD="Add"
+VAL_MODIFY="Modify"
+
 # Messages
 MSG_ADD_SUCCESS="Personne ajouté avec succès"
+MSG_MODIFY_SUCCESS="Personne modifié avec succès"
+MSG_DEL_SUCCESS="Personne supprimé avec succès"
 MSG_INVALID_NAME="Prenom ou nom : format invalide (lettre uniquement)"
 MSG_INVALID_GENDER="Genre : format invalide ('Homme','Femme')"
 MSG_INVALID_BIRTHDAY="Date de naissance : format invalide ('01-01-2001')"
@@ -49,15 +56,17 @@ MSG_INVALID_PHONE="Telephone : format invalide (10 chiffres)"
 MSG_INVALID_JOB="Métier : saisi vide"
 MSG_INVALID_RELATIONSHIP="Situation : saisi vide"
 MSG_INVALID_KIDS="Nombre enfant : saisi vide"
-MSG_INVALID_MEMBERSHIP="Id : error"
+MSG_INVALID_MEMBERSHIP="Erreur : avec l'id, contacter l'admin."
 MSG_INVALID_ROLE="Role : saisi vide"
 MSG_NO_SELECTION="Aucune selection"
+MSG_USER_NOT_FIND="Erreur : personne introuvable, contacter l'admin."
 
 # Widgets text
 TXT_EXIT="Quitter"
 TXT_BACK="Retour"
 TXT_ADD="Ajouter"
 TXT_DEL="Supprimer"
+TXT_MODIFY="Modifier"
 
 # List
 LIST_GENDER = ["Homme","Femme"]
@@ -69,6 +78,7 @@ REGEX_EMAIL = ""
 
 # Key
 KEY_ALERT="Alert"
+KEY_FORM="Form"
 
 # design
 BUTTON_STYLE = {

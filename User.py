@@ -1,6 +1,6 @@
 class User:
-    def __init__(self, first_name:str, last_name:str, gender:str, birthday:str, start_suscription:str, end_suscription:str, address:str, city:str, zipcode:str, email:str, phone:str, job:str, relationship_situation:str, nb_kids:str, membership_number:str, membership_role:str):
-        self.id = 0
+    def __init__(self, first_name:str, last_name:str, gender:str, birthday:str, start_suscription:str, end_suscription:str, address:str, city:str, zipcode:str, email:str, phone:str, job:str, relationship_situation:str, nb_kids:str, membership_number:str, membership_role:str, id:int=0):
+        self.id = id
         self.first_name = first_name
         self.last_name = last_name
         self.gender = gender
@@ -37,3 +37,4 @@ class User:
             self.membership_number,
             self.membership_role
         ]
+
