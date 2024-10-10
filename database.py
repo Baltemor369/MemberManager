@@ -117,4 +117,4 @@ class Database:
         else:
             ids = [int(id[0]) for id in ids]
             new_id = max(ids) + 1
-            return f'{new_id:04d}'
+            return f'#{new_id:04d}'

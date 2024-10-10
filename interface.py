@@ -19,28 +19,11 @@ class Interface:
         self.session_state = {}
         self.session_state[KEY_ALERT] = ("", None)
         self.session_state[KEY_FORM] = ""
-        self.session_state[ID]=""
-        self.session_state[FIRST_NAME]=""
-        self.session_state[LAST_NAME]=""
-        self.session_state[GENDER]=""
-        self.session_state[BIRTHDAY]=""
-        self.session_state[START_SUSCRIPTION]=""
-        self.session_state[END_SUSCRIPTION]=""
-        self.session_state[ADDRESS]=""
-        self.session_state[CITY]=""
-        self.session_state[ZIPCODE]=""
-        self.session_state[EMAIL]=""
-        self.session_state[PHONE]=""
-        self.session_state[JOB]=""
-        self.session_state[RELATIONSHIP_SITUATION]=""
-        self.session_state[NB_KIDS]=""
-        self.session_state[MEMBERSHIP_NUMBER]=""
-        self.session_state[MEMBERSHIP_ROLE]=""
+        self.session_state[KEY_USER]=User()
 
         self.tree = ttk.Treeview(self.root)
 
-        user = User("John", "Doe", "M", "1990-01-01", "2023-01-01", "2024-01-01", "123 Main St", "City", "12345", "john.doe@example.com", "1234567890", "Engineer", "Single", 0, "0001", "Member")
-        attributes = list(user.__dict__.keys())
+        attributes = list(User().__dict__.keys())
 
         self.tree["columns"] = attributes
         # Définir les colonnes & entêtes
@@ -55,6 +38,9 @@ class Interface:
     def main_window(self):
         # clear screen
         self.clear_window(self.root)
+
+        # set default value for add form
+        self.session_state[KEY_FORM] = VAL_ADD
 
         # create a exit button for close the window
         frame = tk.Frame(self.root)
@@ -76,7 +62,7 @@ class Interface:
         for elt in self.db.load_data():
             self.tree.insert("", tk.END, values=elt)
 
-        # data table
+        # display table
         self.tree.pack()
 
         # add button
@@ -94,6 +80,7 @@ class Interface:
     def add_window(self):
         # clear screen
         self.clear_window(self.root)
+        self.session_state[KEY_ALERT] = ("", None)
 
         # create a exit button for close the window
         frame = tk.Frame(self.root)
@@ -105,7 +92,7 @@ class Interface:
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
 
-        self.alert_label.configure(text="")
+        self.alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
         self.alert_label.pack(pady=5)
 
         # main Frame
@@ -118,25 +105,25 @@ class Interface:
 
         tk.Label(frameTL, text="Prénom", **LABEL_STYLE).pack(pady=5)
         first_name_entry = tk.Entry(frameTL)
-        first_name_entry.insert(0, self.session_state[FIRST_NAME])
+        first_name_entry.insert(0, self.session_state[KEY_USER].first_name)
         first_name_entry.pack(pady=5)
 
         tk.Label(frameTL, text="Nom", **LABEL_STYLE).pack(pady=5)
         last_name_entry = tk.Entry(frameTL)
-        last_name_entry.insert(0, self.session_state[LAST_NAME])
+        last_name_entry.insert(0, self.session_state[KEY_USER].last_name)
         last_name_entry.pack(pady=5)
 
         tk.Label(frameTL, text="Genre", **LABEL_STYLE).pack(pady=5)
         gender_entry = ttk.Combobox(frameTL, values=LIST_GENDER, width=8)
-        if self.session_state[GENDER]:
-            gender_entry.current(LIST_GENDER.index(self.session_state[GENDER]))
+        if self.session_state[KEY_USER].gender:
+            gender_entry.current(LIST_GENDER.index(self.session_state[KEY_USER].gender))
         else:
             gender_entry.current(0)
         gender_entry.pack(pady=5)
 
         tk.Label(frameTL, text="Date Anniversaire", **LABEL_STYLE).pack(pady=5)
         birthday_entry = tk.Entry(frameTL)
-        birthday_entry.insert(0, self.session_state[BIRTHDAY])
+        birthday_entry.insert(0, self.session_state[KEY_USER].birthday)
         birthday_entry.pack(pady=5)
 
         # Informations de Contact
@@ -145,27 +132,36 @@ class Interface:
 
         tk.Label(frameTR, text="Adresse Postale", **LABEL_STYLE).pack(pady=5)
         address_entry = tk.Entry(frameTR)
-        address_entry.insert(0, self.session_state[ADDRESS])
+        address_entry.insert(0, self.session_state[KEY_USER].address)
         address_entry.pack(pady=5)
 
         tk.Label(frameTR, text="Ville", **LABEL_STYLE).pack(pady=5)
         city_entry = tk.Entry(frameTR)
-        city_entry.insert(0, self.session_state[CITY])
+        city_entry.insert(0, self.session_state[KEY_USER].city)
         city_entry.pack(pady=5)
 
         tk.Label(frameTR, text="Code Postal", **LABEL_STYLE).pack(pady=5)
         zipcode_entry = tk.Entry(frameTR)
-        zipcode_entry.insert(0, self.session_state[ZIPCODE])
+        zipcode_entry.insert(0, self.session_state[KEY_USER].zipcode)
         zipcode_entry.pack(pady=5)
 
         tk.Label(frameTR, text="Email", **LABEL_STYLE).pack(pady=5)
         email_entry = tk.Entry(frameTR)
-        email_entry.insert(0, self.session_state[EMAIL])
+        email_entry.insert(0, self.session_state[KEY_USER].email)
         email_entry.pack(pady=5)
 
         tk.Label(frameTR, text="Téléphone", **LABEL_STYLE).pack(pady=5)
-        phone_entry = tk.Entry(frameTR)
-        phone_entry.pack(pady=5)
+        
+        frame_phone = tk.Frame(frameTR, **ROOT_STYLE)
+        frame_phone.pack()
+        
+        # indic_phone_entry = tk.Entry(frame_phone, width=3)
+        # indic_phone_entry.insert(0, self.session_state[KEY_USER].phone)
+        # indic_phone_entry.pack(pady=5, side="left")
+
+        phone_entry = tk.Entry(frame_phone, width=12)
+        phone_entry.insert(0, self.session_state[KEY_USER].phone)
+        phone_entry.pack(pady=5, side="left")
 
         # Situation
         frameBL = tk.LabelFrame(frame_body, text="Situation", **ROOT_STYLE)
@@ -173,21 +169,21 @@ class Interface:
 
         tk.Label(frameBL, text="Métier", **LABEL_STYLE).pack(pady=5)
         job_entry = tk.Entry(frameBL)
-        job_entry.insert(0, self.session_state[JOB])
+        job_entry.insert(0, self.session_state[KEY_USER].job)
         job_entry.pack(pady=5)
 
         tk.Label(frameBL, text="Situation familiale", **LABEL_STYLE).pack(pady=5)
         relationship_situation_entry = ttk.Combobox(frameBL, values=LIST_RELATIONSHIP, width=10)
-        if self.session_state[GENDER]:
-            relationship_situation_entry.current(LIST_RELATIONSHIP.index(self.session_state[GENDER]))
+        if self.session_state[KEY_USER].relationship_situation:
+            relationship_situation_entry.current(LIST_RELATIONSHIP.index(self.session_state[KEY_USER].relationship_situation))
         else:
             relationship_situation_entry.current(0)
         relationship_situation_entry.pack(pady=5)
 
         tk.Label(frameBL, text="Nombre d'enfant", **LABEL_STYLE).pack(pady=5)
         nb_kids_entry = ttk.Combobox(frameBL, values=list(range(0,21)), width=5)
-        if self.session_state[GENDER]:
-            nb_kids_entry.current(self.session_state[NB_KIDS])
+        if self.session_state[KEY_USER].nb_kids:
+            nb_kids_entry.current(self.session_state[KEY_USER].nb_kids)
         else:
             nb_kids_entry.current(0)
         nb_kids_entry.pack(pady=5)
@@ -198,25 +194,25 @@ class Interface:
 
         tk.Label(frameBR, text="N°adhérent", **LABEL_STYLE).pack(pady=5)
         membership_number_entry = tk.Entry(frameBR)
-        membership_number_entry.insert(0, self.session_state[MEMBERSHIP_NUMBER])
+        membership_number_entry.insert(0, self.session_state[KEY_USER].membership_number)
         membership_number_entry.pack(pady=5)
 
         tk.Label(frameBR, text="Rôle", **LABEL_STYLE).pack(pady=5)
         membership_role_entry = ttk.Combobox(frameBR, values=LIST_ROLE, width=12)
-        if self.session_state[GENDER]:
-            membership_role_entry.current(LIST_ROLE.index(self.session_state[MEMBERSHIP_ROLE]))
+        if self.session_state[KEY_USER].membership_role:
+            membership_role_entry.current(LIST_ROLE.index(self.session_state[KEY_USER].membership_role))
         else:
             membership_role_entry.current(0)
         membership_role_entry.pack(pady=5)
 
         tk.Label(frameBR, text="Date d'inscription", **LABEL_STYLE).pack(pady=5)
         start_suscription_entry = tk.Entry(frameBR)
-        start_suscription_entry.insert(0, self.session_state[START_SUSCRIPTION])
+        start_suscription_entry.insert(0, self.session_state[KEY_USER].start_suscription)
         start_suscription_entry.pack(pady=5)
 
         tk.Label(frameBR, text="Date de sortie", **LABEL_STYLE).pack(pady=5)
         end_suscription_entry = tk.Entry(frameBR)
-        end_suscription_entry.insert(0, self.session_state[END_SUSCRIPTION])
+        end_suscription_entry.insert(0, self.session_state[KEY_USER].end_suscription)
         end_suscription_entry.pack(pady=5)
 
         if self.session_state[KEY_FORM] in [VAL_EMPTY, VAL_ADD]:
@@ -234,7 +230,7 @@ class Interface:
                 job=job_entry.get(),
                 relationship_situation=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
-                membership_number=membership_number_entry.get(),
+                membership_number=self.db.generer_identifiant(),
                 membership_role=membership_role_entry.get(),
                 start_suscription=start_suscription_entry.get(),
                 end_suscription=end_suscription_entry.get()
@@ -258,22 +254,25 @@ class Interface:
                 membership_number=membership_number_entry.get(),
                 membership_role=membership_role_entry.get(),
                 start_suscription=start_suscription_entry.get(),
-                end_suscription=end_suscription_entry.get()
+                end_suscription=end_suscription_entry.get(),
+                id=self.session_state[KEY_USER].id
                 )
             ), **BUTTON_STYLE).pack(pady=5)
 
     # Get & Verify inputs, if all rights, it's added to the database
     def add_client(self, user:User):
-        if user is None:
+        if not user:
+            self.session_state[KEY_ALERT] = (MSG_USER_NOT_FIND, GREEN)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
-
+        
         # manage inputs error
         if not self.verify_inputs(user):
             return
         
         # add the person to the database
         self.db.save_data(user.__list__())
-
+        # clear user
         user = None
         # All succeeded, return to the main menu
         self.session_state[KEY_ALERT] = (MSG_ADD_SUCCESS, GREEN)
@@ -303,9 +302,6 @@ class Interface:
         self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
     
     def modify_window(self):
-        # clear alert message
-        self.alert_label.configure(text="")
-
         # if nothing is selected, display error message
         if not self.tree.selection():
             self.session_state[KEY_ALERT] = (MSG_NO_SELECTION, ORANGE)
@@ -315,43 +311,34 @@ class Interface:
         # get the element selected
         selected_item = self.tree.selection()[0]
         # get values from the element
-        item = self.tree.item(selected_item)["values"]
+        item = self.tree.item(selected_item, "values")
+
+        tmp_id = item[0]
         item = item[1:]
         # session state update 
-        user = User(*item)
-        self.session_state[FIRST_NAME]=user.first_name
-        self.session_state[LAST_NAME]=user.last_name
-        self.session_state[GENDER]=user.gender
-        self.session_state[BIRTHDAY]=user.birthday
-        self.session_state[START_SUSCRIPTION]=user.start_suscription
-        self.session_state[END_SUSCRIPTION]=user.end_suscription
-        self.session_state[ADDRESS]=user.address
-        self.session_state[CITY]=user.city
-        self.session_state[ZIPCODE]=user.zipcode
-        self.session_state[EMAIL]=user.email
-        self.session_state[PHONE]=user.phone
-        self.session_state[JOB]=user.job
-        self.session_state[RELATIONSHIP_SITUATION]=user.relationship_situation
-        self.session_state[NB_KIDS]=user.nb_kids
-        self.session_state[MEMBERSHIP_NUMBER]=user.membership_number
-        self.session_state[MEMBERSHIP_ROLE]=user.membership_role
+        self.session_state[KEY_USER] = User(*item, id=tmp_id)
         # form display
+        self.session_state[KEY_FORM] = VAL_MODIFY
+        self.add_window()
 
     def modify_client(self, user:User):
-        # clear alert message
-        self.alert_label.configure(text="")
-        
         # if user is empty
         if not user:
             self.session_state[KEY_ALERT] = (MSG_USER_NOT_FIND, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         
-        if self.verify_inputs(user):
-            self.session_state[KEY_ALERT] = (MSG_MODIFY_SUCCESS, GREEN)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-        
+        if not self.verify_inputs(user):
+            return
+
+        # update user in the database
         self.db.update_user(user)
+        # clear user
+        user = None
+        # All succeeded, return to the main menu
+        self.session_state[KEY_ALERT] = (MSG_MODIFY_SUCCESS, GREEN)
+        self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+        self.main_window()
 
     def verify_inputs(self, user:User):
         ## verify inputs format
@@ -360,11 +347,13 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         #check gender : H/F
         if user.gender not in LIST_GENDER:
             self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check birthday format : DD-MM-YYYY
         try:
             datetime.datetime.strptime(user.birthday, "%d/%m/%Y")
@@ -372,6 +361,7 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_INVALID_BIRTHDAY, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+       
         # check date start & end subscribe
         try:
             datetime.datetime.strptime(user.start_suscription, "%d/%m/%Y")
@@ -385,52 +375,62 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check address not empty
-        if not user.address:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_ADDRESS, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # if not user.address:
+        #     self.session_state[KEY_ALERT] = (MSG_INVALID_ADDRESS, ORANGE)
+        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+        #     return False
+        
         # check city : not empty
-        if not user.city:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_CITY, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # if not user.city:
+        #     self.session_state[KEY_ALERT] = (MSG_INVALID_CITY, ORANGE)
+        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+        #     return False
+        
         # check zipcode : 5 digits
-        if len(user.zipcode)!= 5 or not user.zipcode.isdigit():
-            self.session_state[KEY_ALERT] = (MSG_INVALID_ZIPCODE, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # if len(user.zipcode)!= 5 or not user.zipcode.isdigit():
+        #     self.session_state[KEY_ALERT] = (MSG_INVALID_ZIPCODE, ORANGE)
+        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+        #     return False
+        
         # check email format : regex
-        if not re.match(REGEX_EMAIL, user.email):
+        if not(re.match(REGEX_EMAIL, user.email) or user.email == ""):
             self.session_state[KEY_ALERT] = (MSG_INVALID_EMAIL, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check phone number format : 10 digits
-        if len(user.phone)!= 10 or not user.phone.isdigit():
+        if not ((len(user.phone)== 10 ) or user.phone == ""):
             self.session_state[KEY_ALERT] = (MSG_INVALID_PHONE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check job : not empty
         if not user.job:
             self.session_state[KEY_ALERT] = (MSG_INVALID_JOB, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
-        # check relationship situation : not empty
-        if not user.relationship_situation:
+        
+        # check relationship situation : in the list
+        if not user.relationship_situation in LIST_RELATIONSHIP:
             self.session_state[KEY_ALERT] = (MSG_INVALID_RELATIONSHIP, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-        # check number of kids : not empty
-        if not user.nb_kids:
+        
+        # check number of kids : is a digit
+        if not (user.nb_kids.isdigit() and int(user.nb_kids) >= 0):
             self.session_state[KEY_ALERT] = (MSG_INVALID_KIDS, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check membership number : not empty
         if not user.membership_number:
             self.session_state[KEY_ALERT] = (MSG_INVALID_MEMBERSHIP, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
-        # check membership role : not empty
-        if not user.membership_role:
+        
+        # check membership role : in the list
+        if not user.membership_role in LIST_ROLE:
             self.session_state[KEY_ALERT] = (MSG_INVALID_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
@@ -447,7 +447,8 @@ class Interface:
         self.root.mainloop()
     
     def back(self):
-        self.session_state[KEY_ALERT]=("","#000000")
+        self.session_state[KEY_ALERT]=("",None)
+        self.session_state[KEY_USER]=User()
         self.main_window()
     # exit the app and all other process need to be stop separately
     def exit(self):
