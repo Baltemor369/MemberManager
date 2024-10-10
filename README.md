@@ -22,3 +22,8 @@ lorem ipsum
 ## Contributions
 
 lorem ipsum
+
+## TODO
+
+- sorting function
+- research function
