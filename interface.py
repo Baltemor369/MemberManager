@@ -76,6 +76,10 @@ class Interface:
         # modify button
         modify_button = tk.Button(self.root, text=TXT_MODIFY, command=self.modify_window, anchor=tk.CENTER, **BUTTON_STYLE)
         modify_button.pack(pady=5, padx=5)
+
+        # export button
+        modify_button = tk.Button(self.root, text=TXT_EXPORT, command=self.exporter, anchor=tk.CENTER, **BUTTON_STYLE)
+        modify_button.pack(pady=5, padx=5)
     
     def add_window(self):
         # clear screen
@@ -159,7 +163,7 @@ class Interface:
         # indic_phone_entry.insert(0, self.session_state[KEY_USER].phone)
         # indic_phone_entry.pack(pady=5, side="left")
 
-        phone_entry = tk.Entry(frame_phone, width=12)
+        phone_entry = tk.Entry(frame_phone)
         phone_entry.insert(0, self.session_state[KEY_USER].phone)
         phone_entry.pack(pady=5, side="left")
 
@@ -238,7 +242,7 @@ class Interface:
             ), **BUTTON_STYLE).pack(pady=5)
         elif self.session_state[KEY_FORM] == VAL_MODIFY:
             # get inputs from Entry to init a User Object and send it to the self.add_client function
-            tk.Button(self.root, text=TXT_ADD, command=lambda : self.modify_client( User(
+            tk.Button(self.root, text=TXT_MODIFY, command=lambda : self.modify_client( User(
                 first_name=first_name_entry.get(),
                 last_name=last_name_entry.get(),
                 gender=gender_entry.get(),
@@ -401,7 +405,7 @@ class Interface:
             return False
         
         # check phone number format : 10 digits
-        if not ((len(user.phone)== 10 ) or user.phone == ""):
+        if not ((len(user.phone) == 10) or user.phone == ""):
             self.session_state[KEY_ALERT] = (MSG_INVALID_PHONE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
@@ -436,7 +440,19 @@ class Interface:
             return False
         
         return True
-        
+    
+    def exporter(self):
+        try:
+            self.db.export_csv()
+            self.session_state[KEY_ALERT] = (MSG_CSV_SUCCESS, GREEN)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        except Exception as e:
+            print(e)
+            self.session_state[KEY_ALERT] = (MSG_CSV_ERROR, RED)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+
     # undisplay widgets in window (not destroy)
     def clear_window(self, window):
         for widget in window.winfo_children():

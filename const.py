@@ -44,6 +44,7 @@ VAL_MODIFY="Modify"
 MSG_ADD_SUCCESS="Personne ajouté avec succès"
 MSG_MODIFY_SUCCESS="Personne modifié avec succès"
 MSG_DEL_SUCCESS="Personne supprimé avec succès"
+MSG_CSV_SUCCESS="Exportation CSV avec succès"
 MSG_INVALID_NAME="Prenom ou nom : format invalide (lettre et \"-' \" uniquement)"
 MSG_INVALID_GENDER="Genre : saisi invalide, sélectionnez dans la liste."
 MSG_INVALID_BIRTHDAY="Date de naissance : format invalide jj/mm/AAAA"
@@ -60,6 +61,7 @@ MSG_INVALID_MEMBERSHIP="Erreur : avec l'id, contacter l'administrateur."
 MSG_INVALID_ROLE="Role : Saisi invalide, sélectionnez dans la liste."
 MSG_NO_SELECTION="Aucune selection"
 MSG_USER_NOT_FIND="Erreur : personne introuvable, contacter l'administrateur."
+MSG_CSV_ERROR="Erreur lors de l'exportation, contacter l'administrateur."
 
 # Widgets text
 TXT_EXIT="Quitter"
@@ -67,6 +69,7 @@ TXT_BACK="Retour"
 TXT_ADD="Ajouter"
 TXT_DEL="Supprimer"
 TXT_MODIFY="Modifier"
+TXT_EXPORT="Exporter"
 
 # List
 LIST_GENDER = ["Homme","Femme"]
@@ -74,7 +77,7 @@ LIST_ROLE = ["Inscript","Administration"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)"]
 
 # Regex
-REGEX_EMAIL = ""
+REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
 # Key
 KEY_ALERT="Alert"

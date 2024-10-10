@@ -1,4 +1,5 @@
 import sqlite3 as sq
+import csv
 from const import *
 
 class Database:
@@ -118,3 +119,22 @@ class Database:
             ids = [int(id[0]) for id in ids]
             new_id = max(ids) + 1
             return f'#{new_id:04d}'
+    
+    def export_csv(self):
+        conn = sq.connect(self.filename)
+        cursor = conn.cursor()
+        cursor.execute(f"SELECT * FROM {TABLE}")
+        data = cursor.fetchall()
+        # get column's names
+        column_names = [description[0] for description in cursor.description]
+
+        # CSV Creation
+        with open('members.csv', 'w', newline='') as csvfile:
+            csvwriter = csv.writer(csvfile)
+            
+            # Write column names
+            csvwriter.writerow(column_names)
+            
+            # Write down data
+            csvwriter.writerows(data)
+        conn.close()
