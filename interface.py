@@ -20,6 +20,7 @@ class Interface:
         self.session_state[KEY_ALERT] = ("", None)
         self.session_state[KEY_FORM] = ""
         self.session_state[KEY_USER]=User()
+        
 
         self.tree = ttk.Treeview(self.root)
 
@@ -31,7 +32,7 @@ class Interface:
         self.tree.heading("#0", text="", anchor=tk.CENTER)
         for col in attributes:
             self.tree.column(col, anchor=tk.CENTER, width=80)
-            self.tree.heading(col, text=col.replace("_"," "), anchor=tk.CENTER)
+            self.tree.heading(col, text=col.replace("_"," "), command=lambda c=col: self.sortby(c, 0), anchor=tk.CENTER)
 
         self.main_window()
 
@@ -55,9 +56,24 @@ class Interface:
         self.alert_label = tk.Label(alert_frame, text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1], **ALERT_STYLE)
         self.alert_label.pack(pady=5)
 
+        # search frame
+        search_frame = tk.Frame(self.root, **ROOT_STYLE)
+        search_frame.pack(padx=10, pady=10)
+
+        tk.Label(search_frame, text="numéro adhérent :")
+
+        self.session_state[KEY_SEARCH] = tk.StringVar()
+        self.session_state[KEY_SEARCH].trace_add("write", self.update_treeview)
+        search_entry = ttk.Entry(search_frame, width=21, textvariable=self.session_state[KEY_SEARCH])
+        search_entry.pack(pady=5, padx=5)
+
+
         # clear treeview data
         self.tree.delete(*self.tree.get_children())
-
+        
+        # retrieve original data
+        self.session_state[KEY_DATA]=self.db.load_data()
+        
         # update tree data
         for elt in self.db.load_data():
             self.tree.insert("", tk.END, values=elt)
@@ -441,6 +457,27 @@ class Interface:
         
         return True
     
+    # Fonction de tri
+    def sortby(self, col, descending):
+        data = [(self.tree.set(child, col), child) for child in self.tree.get_children("")]
+        data.sort(reverse=descending)
+        
+        # Repositionner les éléments dans l'ordre trié
+        for ix, item in enumerate(data):
+            self.tree.move(item[1], '', ix)
+
+        # Ajuster le sens du tri
+        self.tree.heading(col, command=lambda col=col: self.sortby(col, int(not descending)))
+    
+    # Fonction de filtrage
+    def update_treeview(self, *args):
+        search_term = self.session_state[KEY_SEARCH].get().lower()
+        self.tree.delete(*self.tree.get_children())
+        
+        for item in self.session_state[KEY_DATA]:
+            if search_term in item[-2].lower():  # Recherche dans la colonne "Name"
+                self.tree.insert("", "end", values=item)
+
     def exporter(self):
         try:
             self.db.export_csv()

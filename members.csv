@@ -1,4 +1,0 @@
-id,first_name,last_name,gender,birthday,start_subscribe_date,end_subscribe_date,address,city,zipcode,email,phone,job,relationship_situation,nb_kids,membership_number,membership_role
-2,aze,aze,Homme,01/01/2002,01/02/2024,01/02/2025,paix,paris,75000,aze@gmail.com,0612345678,jardinier,Célibataire,0,0001,Inscript
-3,test,test,Homme,01/01/2001,02/02/2024,02/02/2025,liberté,lyon,15000,test@test.test,0712345678,jardinier,Célibataire,1,0002,Inscript
-4,qsd,qsd,Homme,02/03/2005,02/03/2025,02/03/2026,champ elyssé,tour,82000,qsd@qsd.com,0698765432,postier,Marié(e),2,0003,Administration

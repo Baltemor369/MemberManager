@@ -25,5 +25,4 @@ lorem ipsum
 
 ## TODO
 
-- sorting function
 - research function

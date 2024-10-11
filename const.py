@@ -83,6 +83,8 @@ REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 KEY_ALERT="Alert"
 KEY_FORM="Form"
 KEY_USER="User"
+KEY_DATA="Data"
+KEY_SEARCH="Search"
 
 # design
 BUTTON_STYLE = {
