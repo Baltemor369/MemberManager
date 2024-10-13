@@ -25,4 +25,18 @@ lorem ipsum
 
 ## TODO
 
-- research function
+Ajouts :
+- Lieu de naissance
+- nom de naissance
+- cotisation payé / impayé
+- nationalité
+- membre expiré => grisé (conservation des informations)
+
+modification :
+- Fonction : Préseident, secrétaire, trésorier, ONLY 1
+- exportation pour excel sans pb
+- Civilité (M,Mme,Mlle)
+- date fin empty
+
+suppression :
+- ne pas afficher colum "id" 

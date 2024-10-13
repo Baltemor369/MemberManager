@@ -5,7 +5,7 @@ TABLE="members"
 # Fonts
 FONT_TITLE = ("Arial", 17, "bold")
 FONT_MESSAGE = ("Arial", 17, "bold")
-FONT_LABEL = ("Arial", 7, "bold")
+FONT_LABEL = ("Arial", 13, "bold")
 
 # Colors
 DARKGREY = "#ABABAB"
@@ -93,10 +93,11 @@ TXT_MODIFY="Modifier"
 TXT_EXPORT="Exporter"
 TXT_SEARCH="Rechecher par numéro adhérent :"
 
+
 # List
 LIST_GENDER = ["Homme","Femme"]
-LIST_ROLE = ["Inscript","Administration"]
-LIST_RELATIONSHIP = ["Célibataire","Marié(e)"]
+LIST_ROLE = ["Président","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Membre"]
+LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 
 # Regex
 REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"

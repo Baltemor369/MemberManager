@@ -120,7 +120,7 @@ class Interface:
         frame_body.pack(padx=10, pady=10)
 
         # Personnal information
-        frameTL = tk.LabelFrame(frame_body, text="Informations personnelle", **ROOT_STYLE)
+        frameTL = tk.LabelFrame(frame_body, text="Informations personnelles", **LABEL_STYLE)
         frameTL.pack(side="left", padx=15)
 
         tk.Label(frameTL, text="Prénom", **LABEL_STYLE).pack(pady=5)
@@ -141,13 +141,13 @@ class Interface:
             gender_entry.current(0)
         gender_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Date Anniversaire", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTL, text="Date de naissance", **LABEL_STYLE).pack(pady=5)
         birthday_entry = tk.Entry(frameTL)
         birthday_entry.insert(0, self.session_state[KEY_USER].birthday)
         birthday_entry.pack(pady=5)
 
         # Informations de Contact
-        frameTR = tk.LabelFrame(frame_body, text="Informations de Contact", **ROOT_STYLE)
+        frameTR = tk.LabelFrame(frame_body, text="Informations de Contact", **LABEL_STYLE)
         frameTR.pack(side="left", padx=15)
 
         tk.Label(frameTR, text="Adresse Postale", **LABEL_STYLE).pack(pady=5)
@@ -184,10 +184,10 @@ class Interface:
         phone_entry.pack(pady=5, side="left")
 
         # Situation
-        frameBL = tk.LabelFrame(frame_body, text="Situation", **ROOT_STYLE)
+        frameBL = tk.LabelFrame(frame_body, text="Situation", **LABEL_STYLE)
         frameBL.pack(side="left", padx=15)
 
-        tk.Label(frameBL, text="Métier", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBL, text="Profession", **LABEL_STYLE).pack(pady=5)
         job_entry = tk.Entry(frameBL)
         job_entry.insert(0, self.session_state[KEY_USER].job)
         job_entry.pack(pady=5)
@@ -209,10 +209,10 @@ class Interface:
         nb_kids_entry.pack(pady=5)
 
         # Information dans l'association
-        frameBR = tk.LabelFrame(frame_body, text="Information dans l'association", **ROOT_STYLE)
+        frameBR = tk.LabelFrame(frame_body, text="Informations association", **LABEL_STYLE)
         frameBR.pack(side="left", padx=15)
 
-        tk.Label(frameBR, text="Rôle", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBR, text="Fonction", **LABEL_STYLE).pack(pady=5)
         membership_role_entry = ttk.Combobox(frameBR, values=LIST_ROLE, width=12)
         if self.session_state[KEY_USER].membership_role:
             membership_role_entry.current(LIST_ROLE.index(self.session_state[KEY_USER].membership_role))
