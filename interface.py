@@ -473,7 +473,7 @@ class Interface:
         self.tree.delete(*self.tree.get_children())
         
         for item in self.session_state[KEY_DATA]:
-            if search_term in item[-2].lower():  # Recherche dans la colonne "Name"
+            if search_term in item[-2].lower():
                 self.tree.insert("", "end", values=item)
 
     def exporter(self):

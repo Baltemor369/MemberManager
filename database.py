@@ -1,6 +1,7 @@
 import sqlite3 as sq
 import csv
 from const import *
+from User import *
 
 class Database:
     def __init__(self, filename:str)->bool:
@@ -10,23 +11,27 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(f"""
                 CREATE TABLE IF NOT EXISTS {TABLE} (
-                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    first_name TEXT NOT NULL,
-                    last_name TEXT NOT NULL,
-                    gender TEXT NOT NULL,
-                    birthday DATE NOT NULL,
-                    start_subscribe_date DATE NOT NULL,
-                    end_subscribe_date DATE NOT NULL,
-                    address TEXT NOT NULL,
-                    city TEXT NOT NULL,
-                    zipcode INTEGER NOT NULL,
-                    email TEXT NOT NULL UNIQUE,
-                    phone TEXT NOT NULL UNIQUE,
-                    job TEXT NOT NULL,
-                    relationship_situation TEXT NOT NULL,
-                    nb_kids INTEGER NOT NULL,
-                    membership_number TEXT NOT NULL UNIQUE,
-                    membership_role TEXT NOT NULL
+                    {DB_ID} INTEGER PRIMARY KEY AUTOINCREMENT,
+                    {DB_FIRST_NAME} TEXT NOT NULL,
+                    {DB_LAST_NAME} TEXT NOT NULL,
+                    {DB_BIRTHDAY_LAST_NAME} TEXT NOT NULL,
+                    {DB_CIVILITY} TEXT NOT NULL,
+                    {DB_NATIONALITY} TEXT NOT NULL,
+                    {DB_BIRTHDAY} DATE NOT NULL,
+                    {DB_BIRTHDAY_LOCATION} TEXT NOT NULL,
+                    {DB_START_SUSCRIPTION} DATE NOT NULL,
+                    {DB_END_SUSCRIPTION} DATE NOT NULL,
+                    {DB_ADDRESS} TEXT NOT NULL,
+                    {DB_CITY} TEXT NOT NULL,
+                    {DB_ZIPCODE} INTEGER NOT NULL,
+                    {DB_EMAIL} TEXT NOT NULL,
+                    {DB_PHONE} TEXT NOT NULL,
+                    {DB_JOB} TEXT NOT NULL,
+                    {DB_RELATIONSHIP_SITUATION} TEXT NOT NULL,
+                    {DB_NB_KIDS} INTEGER NOT NULL,
+                    {DB_MEMBERSHIP_NUMBER} TEXT NOT NULL UNIQUE,
+                    {DB_MEMBERSHIP_FONCTION} TEXT NOT NULL
+                    {DB_ACTIVITY} BOOLEAN NOT NULL
                 )
             """)
             conn.commit()
@@ -51,9 +56,9 @@ class Database:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT OR IGNORE INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, data[:-1])
+                INSERT OR IGNORE INTO {TABLE} ({User.__attr__()})
+                VALUES ({"?," * (len(User.__attr__()-1))}?)
+            """, data)
             conn.commit()
             conn.close()
             return True
@@ -106,9 +111,9 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(f"""
                 UPDATE {TABLE}
-                SET first_name =?, last_name =?, gender =?, birthday =?, start_subscribe_date =?, end_subscribe_date =?, address =?, city =?, zipcode =?, email =?, phone =?, job =?, relationship_situation =?, nb_kids =?, membership_number =?, membership_role =?
+                SET 
                 WHERE id =?
-            """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role, user.id))
+            """, )
             conn.commit()
             conn.close()
             return True
