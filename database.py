@@ -53,11 +53,12 @@ class Database:
             cursor.execute(f"""
                 INSERT OR IGNORE INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, data)
+            """, data[:-1])
             conn.commit()
             conn.close()
             return True
-        except:
+        except Exception as e:
+            print(e)
             return False
 
     # Function use to select items in the database
@@ -70,14 +71,19 @@ class Database:
         return data
 
     def insert_user(self, user):
-        conn = sq.connect(self.filename)
-        cursor = conn.cursor()
-        cursor.execute(f"""
-            INSERT INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-        """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role))
-        conn.commit()
-        conn.close()
+        try:
+            conn = sq.connect(self.filename)
+            cursor = conn.cursor()
+            cursor.execute(f"""
+                INSERT INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role))
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Erreur lors de l'insertion de l'utilisateur : {e}")
+            return False
 
     def delete_user(self, user_id:str)->bool:
         try:
@@ -95,21 +101,27 @@ class Database:
             return False
     
     def update_user(self, user):
+        try:
+            conn = sq.connect(self.filename)
+            cursor = conn.cursor()
+            cursor.execute(f"""
+                UPDATE {TABLE}
+                SET first_name =?, last_name =?, gender =?, birthday =?, start_subscribe_date =?, end_subscribe_date =?, address =?, city =?, zipcode =?, email =?, phone =?, job =?, relationship_situation =?, nb_kids =?, membership_number =?, membership_role =?
+                WHERE id =?
+            """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role, user.id))
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Erreur lors de la mise à jour de l'utilisateur : {e}")
+            if conn:
+                conn.close()
+            return False
+    
+    def generer_identifiant(self)->str:
         conn = sq.connect(self.filename)
         cursor = conn.cursor()
-        cursor.execute(f"""
-            UPDATE {TABLE}
-            SET first_name =?, last_name =?, gender =?, birthday =?, start_subscribe_date =?, end_subscribe_date =?, address =?, city =?, zipcode =?, email =?, phone =?, job =?, relationship_situation =?, nb_kids =?, membership_number =?, membership_role =?
-            WHERE id =?
-        """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role, user.id))
-        conn.commit()
-        conn.close()
-            
-    
-    def generer_identifiant()->str:
-        conn = sq.connect('membres.db')
-        cursor = conn.cursor()
-        cursor.execute(f'SELECT {MEMBERSHIP_NUMBER} FROM {TABLE}')
+        cursor.execute(f'SELECT {DB_MEMBERSHIP_NUMBER} FROM {TABLE}')
         ids = cursor.fetchall()
         conn.close()
 
@@ -118,7 +130,7 @@ class Database:
         else:
             ids = [int(id[0]) for id in ids]
             new_id = max(ids) + 1
-            return f'#{new_id:04d}'
+            return f'{new_id:04d}'
     
     def export_csv(self):
         conn = sq.connect(self.filename)

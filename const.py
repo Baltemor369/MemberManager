@@ -3,7 +3,7 @@ APP_NAME="MyApp"
 TABLE="members"
 
 # Fonts
-FONT_TITLE = ("Arial", 21, "bold")
+FONT_TITLE = ("Arial", 17, "bold")
 FONT_MESSAGE = ("Arial", 17, "bold")
 FONT_LABEL = ("Arial", 7, "bold")
 
@@ -15,6 +15,26 @@ RED = "#FF0000"
 ORANGE = "#EE9524"
 LIGHTBLUE = "#45ABFF"
 BLACK="#000000"
+
+# Database col
+DB_ID="id"
+DB_FIRST_NAME="first_name"
+DB_LAST_NAME="last_name"
+DB_GENDER="gender"
+DB_BIRTHDAY="brithday"
+DB_START_SUSCRIPTION="start_subscribe_date"
+DB_END_SUSCRIPTION="end_subscribe_date"
+DB_ADDRESS="address"
+DB_CITY="city"
+DB_ZIPCODE="zipcode"
+DB_EMAIL="email"
+DB_PHONE="phone"
+DB_JOB="job"
+DB_RELATIONSHIP_SITUATION="relationship_situation"
+DB_NB_KIDS="nb_kids"
+DB_MEMBERSHIP_NUMBER="membership_number"
+DB_MEMBERSHIP_ROLE="membership_role"
+
 
 # attributs
 ID="id"
@@ -62,6 +82,7 @@ MSG_INVALID_ROLE="Role : Saisi invalide, sélectionnez dans la liste."
 MSG_NO_SELECTION="Aucune selection"
 MSG_USER_NOT_FIND="Erreur : personne introuvable, contacter l'administrateur."
 MSG_CSV_ERROR="Erreur lors de l'exportation, contacter l'administrateur."
+MSG_SAVING_DATA="Erreur lors de la sauvegarde dans la BDD."
 
 # Widgets text
 TXT_EXIT="Quitter"
@@ -70,6 +91,7 @@ TXT_ADD="Ajouter"
 TXT_DEL="Supprimer"
 TXT_MODIFY="Modifier"
 TXT_EXPORT="Exporter"
+TXT_SEARCH="Rechecher par numéro adhérent :"
 
 # List
 LIST_GENDER = ["Homme","Femme"]
@@ -104,5 +126,10 @@ ALERT_STYLE = {
 
 LABEL_STYLE = {
     "font":FONT_LABEL,
+    "bg":LIGHTBLUE,
+}
+
+TITLE_STYLE = {
+    "font":FONT_TITLE,
     "bg":LIGHTBLUE,
 }

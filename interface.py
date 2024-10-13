@@ -60,12 +60,12 @@ class Interface:
         search_frame = tk.Frame(self.root, **ROOT_STYLE)
         search_frame.pack(padx=10, pady=10)
 
-        tk.Label(search_frame, text="numéro adhérent :")
+        tk.Label(search_frame, text=TXT_SEARCH, **TITLE_STYLE).pack(pady=5, side="left")
 
         self.session_state[KEY_SEARCH] = tk.StringVar()
         self.session_state[KEY_SEARCH].trace_add("write", self.update_treeview)
         search_entry = ttk.Entry(search_frame, width=21, textvariable=self.session_state[KEY_SEARCH])
-        search_entry.pack(pady=5, padx=5)
+        search_entry.pack(pady=5, padx=5, side="left")
 
 
         # clear treeview data
@@ -212,11 +212,6 @@ class Interface:
         frameBR = tk.LabelFrame(frame_body, text="Information dans l'association", **ROOT_STYLE)
         frameBR.pack(side="left", padx=15)
 
-        tk.Label(frameBR, text="N°adhérent", **LABEL_STYLE).pack(pady=5)
-        membership_number_entry = tk.Entry(frameBR)
-        membership_number_entry.insert(0, self.session_state[KEY_USER].membership_number)
-        membership_number_entry.pack(pady=5)
-
         tk.Label(frameBR, text="Rôle", **LABEL_STYLE).pack(pady=5)
         membership_role_entry = ttk.Combobox(frameBR, values=LIST_ROLE, width=12)
         if self.session_state[KEY_USER].membership_role:
@@ -271,7 +266,7 @@ class Interface:
                 job=job_entry.get(),
                 relationship_situation=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
-                membership_number=membership_number_entry.get(),
+                membership_number=self.session_state[KEY_USER].membership_number,
                 membership_role=membership_role_entry.get(),
                 start_suscription=start_suscription_entry.get(),
                 end_suscription=end_suscription_entry.get(),
@@ -289,9 +284,11 @@ class Interface:
         # manage inputs error
         if not self.verify_inputs(user):
             return
-        
         # add the person to the database
-        self.db.save_data(user.__list__())
+        if not self.db.save_data(user.__list__()):
+            self.session_state[KEY_ALERT] = (MSG_SAVING_DATA, RED)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
         # clear user
         user = None
         # All succeeded, return to the main menu
@@ -332,7 +329,7 @@ class Interface:
         selected_item = self.tree.selection()[0]
         # get values from the element
         item = self.tree.item(selected_item, "values")
-
+        print(item)
         tmp_id = item[0]
         item = item[1:]
         # session state update 
@@ -355,6 +352,7 @@ class Interface:
         self.db.update_user(user)
         # clear user
         user = None
+        self.session_state[KEY_USER] = User()
         # All succeeded, return to the main menu
         self.session_state[KEY_ALERT] = (MSG_MODIFY_SUCCESS, GREEN)
         self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
@@ -392,7 +390,7 @@ class Interface:
         try:
             datetime.datetime.strptime(user.end_suscription, "%d/%m/%Y")
         except :
-            self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, RED)
+            self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
