@@ -139,73 +139,81 @@ class Interface:
         birth_last_name_entry.pack(pady=5)
 
         tk.Label(frameTL, text=ATTR[DB_CIVILITY], **LABEL_STYLE).pack(pady=5)
-        gender_entry = ttk.Combobox(frameTL, values=LIST_CIVILITY, width=8)
+        civility_entry = ttk.Combobox(frameTL, values=LIST_CIVILITY, width=8)
         if self.session_state[KEY_USER].civility:
-            gender_entry.current(LIST_CIVILITY.index(self.session_state[KEY_USER].civility))
+            civility_entry.current(LIST_CIVILITY.index(self.session_state[KEY_USER].civility))
         else:
-            gender_entry.current(0)
-        gender_entry.pack(pady=5)
+            civility_entry.current(0)
+        civility_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Date de naissance", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTL, text=ATTR[DB_NATIONALITY], **LABEL_STYLE).pack(pady=5)
+        nationality_entry = ttk.Combobox(frameTL, values=LIST_NATION, width=8)
+        if self.session_state[KEY_USER].nationality:
+            nationality_entry.current(LIST_NATION.index(self.session_state[KEY_USER].nationality))
+        else:
+            nationality_entry.current(0)
+        nationality_entry.pack(pady=5)
+
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY], **LABEL_STYLE).pack(pady=5)
         birthday_entry = tk.Entry(frameTL)
         birthday_entry.insert(0, self.session_state[KEY_USER].birthday)
         birthday_entry.pack(pady=5)
+        
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY_LOCATION], **LABEL_STYLE).pack(pady=5)
+        birthday_entry = tk.Entry(frameTL)
+        birthday_entry.insert(0, self.session_state[KEY_USER].birthday_location)
+        birthday_entry.pack(pady=5)
 
         # Informations de Contact
-        frameTR = tk.LabelFrame(frame_body, text="Informations de Contact", **LABEL_STYLE)
+        frameTR = tk.LabelFrame(frame_body, text=TXT_CONTACT_INFO, **LABEL_STYLE)
         frameTR.pack(side="left", padx=15)
 
-        tk.Label(frameTR, text="Adresse Postale", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTR, text=ATTR[DB_ADDRESS], **LABEL_STYLE).pack(pady=5)
         address_entry = tk.Entry(frameTR)
         address_entry.insert(0, self.session_state[KEY_USER].address)
         address_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Ville", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTR, text=ATTR[DB_CITY], **LABEL_STYLE).pack(pady=5)
         city_entry = tk.Entry(frameTR)
         city_entry.insert(0, self.session_state[KEY_USER].city)
         city_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Code Postal", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTR, text=ATTR[DB_ZIPCODE], **LABEL_STYLE).pack(pady=5)
         zipcode_entry = tk.Entry(frameTR)
         zipcode_entry.insert(0, self.session_state[KEY_USER].zipcode)
         zipcode_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Email", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTR, text=ATTR[DB_EMAIL], **LABEL_STYLE).pack(pady=5)
         email_entry = tk.Entry(frameTR)
         email_entry.insert(0, self.session_state[KEY_USER].email)
         email_entry.pack(pady=5)
 
-        tk.Label(frameTR, text="Téléphone", **LABEL_STYLE).pack(pady=5)
-        
+        tk.Label(frameTR, text=ATTR[DB_PHONE], **LABEL_STYLE).pack(pady=5)
         frame_phone = tk.Frame(frameTR, **ROOT_STYLE)
         frame_phone.pack()
-        
-        # indic_phone_entry = tk.Entry(frame_phone, width=3)
-        # indic_phone_entry.insert(0, self.session_state[KEY_USER].phone)
-        # indic_phone_entry.pack(pady=5, side="left")
 
         phone_entry = tk.Entry(frame_phone)
         phone_entry.insert(0, self.session_state[KEY_USER].phone)
         phone_entry.pack(pady=5, side="left")
 
         # Situation
-        frameBL = tk.LabelFrame(frame_body, text="Situation", **LABEL_STYLE)
+        frameBL = tk.LabelFrame(frame_body, text=TXT_SITUATION_INFO, **LABEL_STYLE)
         frameBL.pack(side="left", padx=15)
 
-        tk.Label(frameBL, text="Profession", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBL, text=ATTR[DB_JOB], **LABEL_STYLE).pack(pady=5)
         job_entry = tk.Entry(frameBL)
         job_entry.insert(0, self.session_state[KEY_USER].job)
         job_entry.pack(pady=5)
 
-        tk.Label(frameBL, text="Situation familiale", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBL, text=ATTR[DB_RELATIONSHIP_SITUATION], **LABEL_STYLE).pack(pady=5)
         relationship_situation_entry = ttk.Combobox(frameBL, values=LIST_RELATIONSHIP, width=10)
-        if self.session_state[KEY_USER].relationship_situation:
-            relationship_situation_entry.current(LIST_RELATIONSHIP.index(self.session_state[KEY_USER].relationship_situation))
+        if self.session_state[KEY_USER].relationship:
+            relationship_situation_entry.current(LIST_RELATIONSHIP.index(self.session_state[KEY_USER].relationship))
         else:
             relationship_situation_entry.current(0)
         relationship_situation_entry.pack(pady=5)
 
-        tk.Label(frameBL, text="Nombre d'enfant", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBL, text=ATTR[DB_NB_KIDS], **LABEL_STYLE).pack(pady=5)
         nb_kids_entry = ttk.Combobox(frameBL, values=list(range(0,21)), width=5)
         if self.session_state[KEY_USER].nb_kids:
             nb_kids_entry.current(self.session_state[KEY_USER].nb_kids)
@@ -214,23 +222,23 @@ class Interface:
         nb_kids_entry.pack(pady=5)
 
         # Information dans l'association
-        frameBR = tk.LabelFrame(frame_body, text="Informations association", **LABEL_STYLE)
+        frameBR = tk.LabelFrame(frame_body, text=TXT_ASSOCIATION_INFO, **LABEL_STYLE)
         frameBR.pack(side="left", padx=15)
 
-        tk.Label(frameBR, text="Fonction", **LABEL_STYLE).pack(pady=5)
-        membership_role_entry = ttk.Combobox(frameBR, values=LIST_ROLE, width=12)
-        if self.session_state[KEY_USER].membership_role:
-            membership_role_entry.current(LIST_ROLE.index(self.session_state[KEY_USER].membership_role))
+        tk.Label(frameBR, text=ATTR[DB_MEMBERSHIP_FONCTION], **LABEL_STYLE).pack(pady=5)
+        membership_role_entry = ttk.Combobox(frameBR, values=LIST_FUNCTION, width=12)
+        if self.session_state[KEY_USER].member_fonction:
+            membership_role_entry.current(LIST_FUNCTION.index(self.session_state[KEY_USER].member_fonction))
         else:
             membership_role_entry.current(0)
         membership_role_entry.pack(pady=5)
 
-        tk.Label(frameBR, text="Date d'inscription", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBR, text=ATTR[DB_START_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
         start_suscription_entry = tk.Entry(frameBR)
         start_suscription_entry.insert(0, self.session_state[KEY_USER].start_suscription)
         start_suscription_entry.pack(pady=5)
 
-        tk.Label(frameBR, text="Date de sortie", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameBR, text=ATTR[DB_END_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
         end_suscription_entry = tk.Entry(frameBR)
         end_suscription_entry.insert(0, self.session_state[KEY_USER].end_suscription)
         end_suscription_entry.pack(pady=5)
@@ -240,8 +248,10 @@ class Interface:
             tk.Button(self.root, text=TXT_ADD, command=lambda : self.add_client( User(
                 first_name=first_name_entry.get(),
                 last_name=last_name_entry.get(),
-                gender=gender_entry.get(),
+                birth_last_name_entry=birth_last_name_entry.get(),
+                civility=civility_entry.get(),
                 birthday=birthday_entry.get(),
+                birthday_location=birthday_entry.get(),
                 address=address_entry.get(),
                 city=city_entry.get(),
                 zipcode=zipcode_entry.get(),
@@ -261,7 +271,7 @@ class Interface:
             tk.Button(self.root, text=TXT_MODIFY, command=lambda : self.modify_client( User(
                 first_name=first_name_entry.get(),
                 last_name=last_name_entry.get(),
-                gender=gender_entry.get(),
+                gender=civility_entry.get(),
                 birthday=birthday_entry.get(),
                 address=address_entry.get(),
                 city=city_entry.get(),
@@ -271,7 +281,7 @@ class Interface:
                 job=job_entry.get(),
                 relationship_situation=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
-                membership_number=self.session_state[KEY_USER].membership_number,
+                membership_number=self.session_state[KEY_USER].member_id,
                 membership_role=membership_role_entry.get(),
                 start_suscription=start_suscription_entry.get(),
                 end_suscription=end_suscription_entry.get(),
@@ -289,6 +299,7 @@ class Interface:
         # manage inputs error
         if not self.verify_inputs(user):
             return
+        
         # add the person to the database
         if not self.db.save_data(user.__list__()):
             self.session_state[KEY_ALERT] = (MSG_SAVING_DATA, RED)
@@ -453,7 +464,7 @@ class Interface:
             return False
         
         # check membership role : in the list
-        if not user.membership_role in LIST_ROLE:
+        if not user.membership_role in LIST_FUNCTION:
             self.session_state[KEY_ALERT] = (MSG_INVALID_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False

@@ -52,13 +52,13 @@ ATTR = {
     DB_BIRTHDAY_LOCATION:"Lieu de naissance",
     DB_START_SUSCRIPTION:"Date début",
     DB_END_SUSCRIPTION:"date fin",
-    DB_ADDRESS:"Adresse",
+    DB_ADDRESS:"Adresse Postale",
     DB_CITY:"Ville",
     DB_ZIPCODE:"Code postal",
     DB_EMAIL:"Email",
     DB_PHONE:"Telephone",
     DB_JOB:"Metier",
-    DB_RELATIONSHIP_SITUATION:"Situation",
+    DB_RELATIONSHIP_SITUATION:"Situation familiale",
     DB_NB_KIDS:"Nombre enfants",
     DB_MEMBERSHIP_FONCTION:"Fonction",
     DB_ACTIVITY:"Activité",
@@ -113,7 +113,7 @@ TXT_ASSOCIATION_INFO="Informations association"
 LIST_CIVILITY = ["M","Mme","Mlle"]
 LIST_FUNCTION = ["Membre","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
-
+LIST_NATION = ["France","Allemagne","Belgique"]
 # Regex
 REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 
