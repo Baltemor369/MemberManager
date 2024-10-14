@@ -36,37 +36,40 @@ DB_JOB="job"
 DB_RELATIONSHIP_SITUATION="relationship"
 DB_NB_KIDS="nb_kids"
 DB_MEMBERSHIP_FONCTION="member_fonction"
-DB_ACTIVITY="ativity"
+DB_ACTIVITY="activity"
 DB_MEMBERSHIP_NUMBER="member_id"
 
 
 # attributs
-ID="ID"
-FIRST_NAME="Prénom"
-LAST_NAME="Nom"
-BIRTHDAY_LAST_NAME="Nom de naissance"
-CIVILITY="Civilité"
-NATIONALITY="Nationalité"
-BIRTHDAY="Date de naissance"
-BIRTHDAY_LOCATION="Lieu de naissance"
-START_SUSCRIPTION="Date début"
-END_SUSCRIPTION="date fin"
-ADDRESS="Adresse"
-CITY="Ville"
-ZIPCODE="Code postal"
-EMAIL="Email"
-PHONE="Telephone"
-JOB="Metier"
-RELATIONSHIP_SITUATION="Situation"
-NB_KIDS="Nombre enfants"
-MEMBERSHIP_ROLE="Fonction"
-ACTIVITY="Activité"
-MEMBERSHIP_NUMBER="Identifiant membre"
+ATTR = {
+    DB_ID:"ID",
+    DB_FIRST_NAME:"Prénom",
+    DB_LAST_NAME:"Nom",
+    DB_BIRTHDAY_LAST_NAME:"Nom de naissance",
+    DB_CIVILITY:"Civilité",
+    DB_NATIONALITY:"Nationalité",
+    DB_BIRTHDAY:"Date de naissance",
+    DB_BIRTHDAY_LOCATION:"Lieu de naissance",
+    DB_START_SUSCRIPTION:"Date début",
+    DB_END_SUSCRIPTION:"date fin",
+    DB_ADDRESS:"Adresse",
+    DB_CITY:"Ville",
+    DB_ZIPCODE:"Code postal",
+    DB_EMAIL:"Email",
+    DB_PHONE:"Telephone",
+    DB_JOB:"Metier",
+    DB_RELATIONSHIP_SITUATION:"Situation",
+    DB_NB_KIDS:"Nombre enfants",
+    DB_MEMBERSHIP_FONCTION:"Fonction",
+    DB_ACTIVITY:"Activité",
+    DB_MEMBERSHIP_NUMBER:"Identifiant"
+}
 
 # Values
 VAL_EMPTY=""
 VAL_ADD="Add"
 VAL_MODIFY="Modify"
+VAL_EMPTY_ALERT=("", None)
 
 # Messages
 MSG_ADD_SUCCESS="Personne ajouté avec succès"
@@ -100,11 +103,15 @@ TXT_DEL="Supprimer"
 TXT_MODIFY="Modifier"
 TXT_EXPORT="Exporter"
 TXT_SEARCH="Rechecher par numéro adhérent :"
+TXT_PERSONAL_INFO="Informations personnelles"
+TXT_CONTACT_INFO="Informations de contact"
+TXT_SITUATION_INFO="Situation"
+TXT_ASSOCIATION_INFO="Informations association"
 
 
 # List
-LIST_GENDER = ["Homme","Femme"]
-LIST_ROLE = ["Président","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Membre"]
+LIST_CIVILITY = ["M","Mme","Mlle"]
+LIST_FUNCTION = ["Membre","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 
 # Regex

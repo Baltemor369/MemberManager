@@ -17,22 +17,22 @@ class Interface:
         self.root.configure(**ROOT_STYLE)
 
         self.session_state = {}
-        self.session_state[KEY_ALERT] = ("", None)
-        self.session_state[KEY_FORM] = ""
+        self.session_state[KEY_ALERT] = VAL_EMPTY_ALERT
+        self.session_state[KEY_FORM] = VAL_EMPTY
         self.session_state[KEY_USER]=User()
         
 
         self.tree = ttk.Treeview(self.root)
+        
+        attributes = User().__attr__()
 
-        attributes = list(User().__dict__.keys())
-
-        self.tree["columns"] = attributes
+        self.tree["columns"] = attributes[1:]
         # Définir les colonnes & entêtes
         self.tree.column("#0", width=0)
         self.tree.heading("#0", text="", anchor=tk.CENTER)
-        for col in attributes:
+        for col in attributes[1:]:
             self.tree.column(col, anchor=tk.CENTER, width=80)
-            self.tree.heading(col, text=col.replace("_"," "), command=lambda c=col: self.sortby(c, 0), anchor=tk.CENTER)
+            self.tree.heading(col, text=ATTR[col], command=lambda c=col: self.sortby(c, 0), anchor=tk.CENTER)
 
         self.main_window()
 
@@ -120,23 +120,28 @@ class Interface:
         frame_body.pack(padx=10, pady=10)
 
         # Personnal information
-        frameTL = tk.LabelFrame(frame_body, text="Informations personnelles", **LABEL_STYLE)
+        frameTL = tk.LabelFrame(frame_body, text=TXT_PERSONAL_INFO, **LABEL_STYLE)
         frameTL.pack(side="left", padx=15)
 
-        tk.Label(frameTL, text="Prénom", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTL, text=ATTR[DB_FIRST_NAME], **LABEL_STYLE).pack(pady=5)
         first_name_entry = tk.Entry(frameTL)
         first_name_entry.insert(0, self.session_state[KEY_USER].first_name)
         first_name_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Nom", **LABEL_STYLE).pack(pady=5)
+        tk.Label(frameTL, text=ATTR[DB_LAST_NAME], **LABEL_STYLE).pack(pady=5)
         last_name_entry = tk.Entry(frameTL)
         last_name_entry.insert(0, self.session_state[KEY_USER].last_name)
         last_name_entry.pack(pady=5)
+        
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY_LAST_NAME], **LABEL_STYLE).pack(pady=5)
+        birth_last_name_entry = tk.Entry(frameTL)
+        birth_last_name_entry.insert(0, self.session_state[KEY_USER].day_last_name)
+        birth_last_name_entry.pack(pady=5)
 
-        tk.Label(frameTL, text="Genre", **LABEL_STYLE).pack(pady=5)
-        gender_entry = ttk.Combobox(frameTL, values=LIST_GENDER, width=8)
-        if self.session_state[KEY_USER].gender:
-            gender_entry.current(LIST_GENDER.index(self.session_state[KEY_USER].gender))
+        tk.Label(frameTL, text=ATTR[DB_CIVILITY], **LABEL_STYLE).pack(pady=5)
+        gender_entry = ttk.Combobox(frameTL, values=LIST_CIVILITY, width=8)
+        if self.session_state[KEY_USER].civility:
+            gender_entry.current(LIST_CIVILITY.index(self.session_state[KEY_USER].civility))
         else:
             gender_entry.current(0)
         gender_entry.pack(pady=5)

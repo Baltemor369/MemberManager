@@ -30,8 +30,8 @@ class Database:
                     {DB_RELATIONSHIP_SITUATION} TEXT NOT NULL,
                     {DB_NB_KIDS} INTEGER NOT NULL,
                     {DB_MEMBERSHIP_NUMBER} TEXT NOT NULL UNIQUE,
-                    {DB_MEMBERSHIP_FONCTION} TEXT NOT NULL
-                    {DB_ACTIVITY} BOOLEAN NOT NULL
+                    {DB_MEMBERSHIP_FONCTION} TEXT NOT NULL,
+                    {DB_ACTIVITY} BOOLEAN
                 )
             """)
             conn.commit()
@@ -75,14 +75,15 @@ class Database:
         conn.close()
         return data
 
-    def insert_user(self, user):
+    def insert_user(self, user:User):
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT INTO {TABLE} (first_name, last_name, gender, birthday, start_subscribe_date, end_subscribe_date, address, city, zipcode, email, phone, job, relationship_situation, nb_kids, membership_number, membership_role)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (user.first_name, user.last_name, user.gender, user.birthday, user.start_suscription, user.end_suscription, user.address, user.city, user.zipcode, user.email, user.phone, user.job, user.relationship_situation, user.nb_kids, user.membership_number, user.membership_role))
+                INSERT INTO {TABLE} ({User.__attr__()})
+                VALUES ({"?," * (len(User.__attr__()-1))})
+            """, ({user.__list__()})
+            )
             conn.commit()
             conn.close()
             return True
@@ -94,7 +95,7 @@ class Database:
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
-            cursor.execute(f"DELETE FROM {TABLE} WHERE id = ?", (user_id,))
+            cursor.execute(f"DELETE FROM {TABLE} WHERE {DB_ID} = ?", (user_id,))
             conn.commit()
             if conn:
                 conn.close()
@@ -112,7 +113,7 @@ class Database:
             cursor.execute(f"""
                 UPDATE {TABLE}
                 SET 
-                WHERE id =?
+                WHERE {DB_ID} =?
             """, )
             conn.commit()
             conn.close()
