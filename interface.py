@@ -4,7 +4,8 @@ import datetime
 from tkinter import ttk
 from const import *
 from User import User
-from database import Database
+from Database import Database
+from Tools import format_date
 
 class Interface:
     def __init__(self):
@@ -235,12 +236,12 @@ class Interface:
 
         tk.Label(frameBR, text=ATTR[DB_START_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
         start_suscription_entry = tk.Entry(frameBR)
-        start_suscription_entry.insert(0, self.session_state[KEY_USER].start_suscription)
+        start_suscription_entry.insert(0, self.session_state[KEY_USER].start_subscription)
         start_suscription_entry.pack(pady=5)
 
         tk.Label(frameBR, text=ATTR[DB_END_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
         end_suscription_entry = tk.Entry(frameBR)
-        end_suscription_entry.insert(0, self.session_state[KEY_USER].end_suscription)
+        end_suscription_entry.insert(0, self.session_state[KEY_USER].end_subscription)
         end_suscription_entry.pack(pady=5)
 
         if self.session_state[KEY_FORM] in [VAL_EMPTY, VAL_ADD]:
@@ -377,17 +378,21 @@ class Interface:
     def verify_inputs(self, user:User):
         ## verify inputs format
         # check firstname and lastname is only with letters
-        if not user.first_name.isalpha() or not user.last_name.isalpha():
+        if not (user.first_name.isalpha() and user.last_name.isalpha() and user.day_last_name):
             self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
-        #check gender : H/F
-        if user.gender not in LIST_GENDER:
+        #check civility : H/F
+        if user.civility not in LIST_CIVILITY:
             self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
+        if user.nationality not in LIST_NATION:
+            self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
         # check birthday format : DD-MM-YYYY
         try:
             datetime.datetime.strptime(user.birthday, "%d/%m/%Y")
@@ -397,15 +402,11 @@ class Interface:
             return False
        
         # check date start & end subscribe
-        try:
-            datetime.datetime.strptime(user.start_suscription, "%d/%m/%Y")
-        except :
+        if format_date(user.start_suscription) is None:
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
-        try:
-            datetime.datetime.strptime(user.end_suscription, "%d/%m/%Y")
-        except :
+        if format_date(user.end_suscription) is None:
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False

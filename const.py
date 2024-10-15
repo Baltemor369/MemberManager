@@ -72,13 +72,18 @@ VAL_MODIFY="Modify"
 VAL_EMPTY_ALERT=("", None)
 
 # Messages
+#Success msg
 MSG_ADD_SUCCESS="Personne ajouté avec succès"
 MSG_MODIFY_SUCCESS="Personne modifié avec succès"
 MSG_DEL_SUCCESS="Personne supprimé avec succès"
 MSG_CSV_SUCCESS="Exportation CSV avec succès"
-MSG_INVALID_NAME="Prenom ou nom : format invalide (lettre et \"-' \" uniquement)"
-MSG_INVALID_GENDER="Genre : saisi invalide, sélectionnez dans la liste."
+
+# error msg
+MSG_INVALID_NAME="Prénom ou nom : format invalide (lettre et \"-' \" uniquement)"
+MSG_INVALID_CIVILITY="Civilité : saisi invalide, sélectionnez dans la liste."
+MSG_INVALID_NATION="Nationalité : saisi invalide, sélectionnez dans la liste."
 MSG_INVALID_BIRTHDAY="Date de naissance : format invalide jj/mm/AAAA"
+MSG_INVALID_LOCATION_BIRTHDAY="Date de naissance : format invalide jj/mm/AAAA"
 MSG_INVALID_SUSCRIPTION="Date d'inscription ou d'expiration : format invalide jj/mm/AAAA"
 MSG_INVALID_ADDRESS="Adresse : saisi vide"
 MSG_INVALID_CITY="Ville : saisi vide"
@@ -116,6 +121,9 @@ LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 LIST_NATION = ["France","Allemagne","Belgique"]
 # Regex
 REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+REGEX_DATE_1 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{2})$"
+REGEX_DATE_2 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{4})$"
+REGEX_DATE = r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$"
 
 # Key
 KEY_ALERT="Alert"
