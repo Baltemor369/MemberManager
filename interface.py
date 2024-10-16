@@ -20,7 +20,7 @@ class Interface:
         self.session_state = {}
         self.session_state[KEY_ALERT] = VAL_EMPTY_ALERT
         self.session_state[KEY_FORM] = VAL_EMPTY
-        self.session_state[KEY_USER]=User()
+        self.session_state[KEY_USER] = User()
         
 
         self.tree = ttk.Treeview(self.root)
@@ -65,7 +65,7 @@ class Interface:
 
         self.session_state[KEY_SEARCH] = tk.StringVar()
         self.session_state[KEY_SEARCH].trace_add("write", self.update_treeview)
-        search_entry = ttk.Entry(search_frame, width=21, textvariable=self.session_state[KEY_SEARCH])
+        search_entry = tk.Entry(search_frame, width=30, textvariable=self.session_state[KEY_SEARCH])
         search_entry.pack(pady=5, padx=5, side="left")
 
 
@@ -101,7 +101,7 @@ class Interface:
     def add_window(self):
         # clear screen
         self.clear_window(self.root)
-        self.session_state[KEY_ALERT] = ("", None)
+        self.session_state[KEY_ALERT] = VAL_EMPTY_ALERT
 
         # create a exit button for close the window
         frame = tk.Frame(self.root)
@@ -227,12 +227,12 @@ class Interface:
         frameBR.pack(side="left", padx=15)
 
         tk.Label(frameBR, text=ATTR[DB_MEMBERSHIP_FONCTION], **LABEL_STYLE).pack(pady=5)
-        membership_role_entry = ttk.Combobox(frameBR, values=LIST_FUNCTION, width=12)
-        if self.session_state[KEY_USER].member_fonction:
-            membership_role_entry.current(LIST_FUNCTION.index(self.session_state[KEY_USER].member_fonction))
+        membership_function_entry = ttk.Combobox(frameBR, values=LIST_FUNCTION, width=12)
+        if self.session_state[KEY_USER].member_function:
+            membership_function_entry.current(LIST_FUNCTION.index(self.session_state[KEY_USER].member_function))
         else:
-            membership_role_entry.current(0)
-        membership_role_entry.pack(pady=5)
+            membership_function_entry.current(0)
+        membership_function_entry.pack(pady=5)
 
         tk.Label(frameBR, text=ATTR[DB_START_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
         start_suscription_entry = tk.Entry(frameBR)
@@ -244,48 +244,62 @@ class Interface:
         end_suscription_entry.insert(0, self.session_state[KEY_USER].end_subscription)
         end_suscription_entry.pack(pady=5)
 
+        tk.Label(frameBR, text=ATTR[DB_ACTIVITY], **LABEL_STYLE).pack(pady=5)
+        activity_entry = ttk.Combobox(frameBR, values=LIST_ACTIF, width=12)
+        if self.session_state[KEY_USER].activity:
+            activity_entry.current(LIST_ACTIF.index(self.session_state[KEY_USER].activity))
+        else:
+            activity_entry.current(0)
+        activity_entry.pack(pady=5)
+
         if self.session_state[KEY_FORM] in [VAL_EMPTY, VAL_ADD]:
             # get inputs from Entry to init a User Object and send it to the self.add_client function
             tk.Button(self.root, text=TXT_ADD, command=lambda : self.add_client( User(
-                first_name=first_name_entry.get(),
-                last_name=last_name_entry.get(),
-                birth_last_name_entry=birth_last_name_entry.get(),
+                first_name=first_name_entry.get().capitalize(),
+                last_name=last_name_entry.get().capitalize(),
+                day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
-                birthday=birthday_entry.get(),
-                birthday_location=birthday_entry.get(),
+                nationality=nationality_entry.get().capitalize(),
+                birthday=format_date(birthday_entry.get()),
+                birthday_location=birthday_entry.get().capitalize(),
                 address=address_entry.get(),
-                city=city_entry.get(),
+                city=city_entry.get().capitalize(),
                 zipcode=zipcode_entry.get(),
                 email=email_entry.get(),
                 phone=phone_entry.get(),
-                job=job_entry.get(),
-                relationship_situation=relationship_situation_entry.get(),
+                job=job_entry.get().capitalize(),
+                relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
-                membership_number=self.db.generer_identifiant(),
-                membership_role=membership_role_entry.get(),
-                start_suscription=start_suscription_entry.get(),
-                end_suscription=end_suscription_entry.get()
+                member_function=membership_function_entry.get(),
+                start_subscription=format_date(start_suscription_entry.get()),
+                end_subscription=format_date(end_suscription_entry.get()),
+                activity=activity_entry.get(),
+                member_id=self.db.generer_identifiant(),
                 )
             ), **BUTTON_STYLE).pack(pady=5)
         elif self.session_state[KEY_FORM] == VAL_MODIFY:
             # get inputs from Entry to init a User Object and send it to the self.add_client function
             tk.Button(self.root, text=TXT_MODIFY, command=lambda : self.modify_client( User(
-                first_name=first_name_entry.get(),
-                last_name=last_name_entry.get(),
-                gender=civility_entry.get(),
-                birthday=birthday_entry.get(),
+                first_name=first_name_entry.get().capitalize(),
+                last_name=last_name_entry.get().capitalize(),
+                day_last_name=birth_last_name_entry.get().capitalize(),
+                civility=civility_entry.get(),
+                nationality=nationality_entry.get().capitalize(),
+                birthday=format_date(birthday_entry.get()),
+                birthday_location=birthday_entry.get().capitalize(),
                 address=address_entry.get(),
-                city=city_entry.get(),
+                city=city_entry.get().capitalize(),
                 zipcode=zipcode_entry.get(),
                 email=email_entry.get(),
                 phone=phone_entry.get(),
-                job=job_entry.get(),
-                relationship_situation=relationship_situation_entry.get(),
+                job=job_entry.get().capitalize(),
+                relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
-                membership_number=self.session_state[KEY_USER].member_id,
-                membership_role=membership_role_entry.get(),
-                start_suscription=start_suscription_entry.get(),
-                end_suscription=end_suscription_entry.get(),
+                member_function=membership_function_entry.get(),
+                start_subscription=format_date(start_suscription_entry.get()),
+                end_subscription=format_date(end_suscription_entry.get()),
+                activity=activity_entry.get(),
+                member_id=self.session_state[KEY_USER].member_id,
                 id=self.session_state[KEY_USER].id
                 )
             ), **BUTTON_STYLE).pack(pady=5)
@@ -293,11 +307,11 @@ class Interface:
     # Get & Verify inputs, if all rights, it's added to the database
     def add_client(self, user:User):
         if not user:
-            self.session_state[KEY_ALERT] = (MSG_USER_NOT_FIND, GREEN)
+            self.session_state[KEY_ALERT] = (MSG_USER_NOT_FIND, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         
-        # manage inputs error
+        # verify inputs
         if not self.verify_inputs(user):
             return
         
@@ -306,8 +320,11 @@ class Interface:
             self.session_state[KEY_ALERT] = (MSG_SAVING_DATA, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
+        
         # clear user
         user = None
+        self.session_state[KEY_USER]=User()
+        
         # All succeeded, return to the main menu
         self.session_state[KEY_ALERT] = (MSG_ADD_SUCCESS, GREEN)
         self.main_window()
@@ -376,58 +393,45 @@ class Interface:
         self.main_window()
 
     def verify_inputs(self, user:User):
+        
         ## verify inputs format
+        
         # check firstname and lastname is only with letters
-        if not (user.first_name.isalpha() and user.last_name.isalpha() and user.day_last_name):
+        if not (user.first_name.isalpha() and user.last_name.isalpha() and user.day_last_name.isalpha()):
             self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
-        #check civility : H/F
+        # check civility
         if user.civility not in LIST_CIVILITY:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
+            self.session_state[KEY_ALERT] = (MSG_INVALID_CIVILITY, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
+        # check nationality
         if user.nationality not in LIST_NATION:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_GENDER, ORANGE)
+            self.session_state[KEY_ALERT] = (MSG_INVALID_NATION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
         # check birthday format : DD-MM-YYYY
-        try:
-            datetime.datetime.strptime(user.birthday, "%d/%m/%Y")
-        except:
+        if format_date(user.birthday) is None:
             self.session_state[KEY_ALERT] = (MSG_INVALID_BIRTHDAY, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
        
+       # check birth location
+
         # check date start & end subscribe
-        if format_date(user.start_suscription) is None:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
-        if format_date(user.end_suscription) is None:
+        if not format_date(user.start_suscription) or not format_date(user.end_suscription):
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
-        # check address not empty
-        # if not user.address:
-        #     self.session_state[KEY_ALERT] = (MSG_INVALID_ADDRESS, ORANGE)
-        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-        #     return False
+        # check address
         
-        # check city : not empty
-        # if not user.city:
-        #     self.session_state[KEY_ALERT] = (MSG_INVALID_CITY, ORANGE)
-        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-        #     return False
+        # check city 
         
-        # check zipcode : 5 digits
-        # if len(user.zipcode)!= 5 or not user.zipcode.isdigit():
-        #     self.session_state[KEY_ALERT] = (MSG_INVALID_ZIPCODE, ORANGE)
-        #     self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-        #     return False
+        # check zipcode 
         
         # check email format : regex
         if not(re.match(REGEX_EMAIL, user.email) or user.email == ""):
@@ -435,19 +439,11 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
-        # check phone number format : 10 digits
-        if not ((len(user.phone) == 10) or user.phone == ""):
-            self.session_state[KEY_ALERT] = (MSG_INVALID_PHONE, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # check phone number
         
-        # check job : not empty
-        if not user.job:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_JOB, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # check job
         
-        # check relationship situation : in the list
+        # check relationship situation from the list
         if not user.relationship_situation in LIST_RELATIONSHIP:
             self.session_state[KEY_ALERT] = (MSG_INVALID_RELATIONSHIP, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
@@ -458,14 +454,10 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
-        # check membership number : not empty
-        if not user.membership_number:
-            self.session_state[KEY_ALERT] = (MSG_INVALID_MEMBERSHIP, ORANGE)
-            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
-            return False
+        # check membership number 
         
-        # check membership role : in the list
-        if not user.membership_role in LIST_FUNCTION:
+        # check membership function from in the list
+        if not user.member_function in LIST_FUNCTION:
             self.session_state[KEY_ALERT] = (MSG_INVALID_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False

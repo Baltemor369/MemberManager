@@ -35,9 +35,9 @@ DB_PHONE="phone"
 DB_JOB="job"
 DB_RELATIONSHIP_SITUATION="relationship"
 DB_NB_KIDS="nb_kids"
-DB_MEMBERSHIP_FONCTION="member_fonction"
+DB_MEMBERSHIP_FONCTION="member_function"
 DB_ACTIVITY="activity"
-DB_MEMBERSHIP_NUMBER="member_id"
+DB_MEMBERSHIP_ID="member_id"
 
 
 # attributs
@@ -51,7 +51,7 @@ ATTR = {
     DB_BIRTHDAY:"Date de naissance",
     DB_BIRTHDAY_LOCATION:"Lieu de naissance",
     DB_START_SUSCRIPTION:"Date début",
-    DB_END_SUSCRIPTION:"date fin",
+    DB_END_SUSCRIPTION:"Date fin",
     DB_ADDRESS:"Adresse Postale",
     DB_CITY:"Ville",
     DB_ZIPCODE:"Code postal",
@@ -62,7 +62,7 @@ ATTR = {
     DB_NB_KIDS:"Nombre enfants",
     DB_MEMBERSHIP_FONCTION:"Fonction",
     DB_ACTIVITY:"Activité",
-    DB_MEMBERSHIP_NUMBER:"Identifiant"
+    DB_MEMBERSHIP_ID:"Identifiant"
 }
 
 # Values
@@ -79,6 +79,7 @@ MSG_DEL_SUCCESS="Personne supprimé avec succès"
 MSG_CSV_SUCCESS="Exportation CSV avec succès"
 
 # error msg
+# add form
 MSG_INVALID_NAME="Prénom ou nom : format invalide (lettre et \"-' \" uniquement)"
 MSG_INVALID_CIVILITY="Civilité : saisi invalide, sélectionnez dans la liste."
 MSG_INVALID_NATION="Nationalité : saisi invalide, sélectionnez dans la liste."
@@ -95,10 +96,12 @@ MSG_INVALID_RELATIONSHIP="Situation : saisi invalide, sélectionnez dans la list
 MSG_INVALID_KIDS="Nombre enfant : saisi invalide, sélectionnez dans la liste."
 MSG_INVALID_MEMBERSHIP="Erreur : avec l'id, contacter l'administrateur."
 MSG_INVALID_ROLE="Role : Saisi invalide, sélectionnez dans la liste."
+# main menu
 MSG_NO_SELECTION="Aucune selection"
-MSG_USER_NOT_FIND="Erreur : personne introuvable, contacter l'administrateur."
+# unexpected error
+MSG_USER_NOT_FIND="Erreur : User empty in add_client, contacter l'administrateur."
 MSG_CSV_ERROR="Erreur lors de l'exportation, contacter l'administrateur."
-MSG_SAVING_DATA="Erreur lors de la sauvegarde dans la BDD."
+MSG_SAVING_DATA="Erreur lors de la sauvegarde dans la BDD, contacter l'administrateur."
 
 # Widgets text
 TXT_EXIT="Quitter"
@@ -119,11 +122,12 @@ LIST_CIVILITY = ["M","Mme","Mlle"]
 LIST_FUNCTION = ["Membre","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 LIST_NATION = ["France","Allemagne","Belgique"]
+LIST_ACTIF = ["Actif","Inactif"]
+
 # Regex
 REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 REGEX_DATE_1 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{2})$"
 REGEX_DATE_2 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{4})$"
-REGEX_DATE = r"^(0[1-9]|[12][0-9]|3[01])/(0[1-9]|1[0-2])/\d{4}$"
 
 # Key
 KEY_ALERT="Alert"

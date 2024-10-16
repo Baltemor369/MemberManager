@@ -7,8 +7,6 @@ class User:
                  nationality:str="", 
                  birthday:str="", 
                  birthday_location:str="", 
-                 start_subscription:str="", 
-                 end_subscription:str="", 
                  address:str="", 
                  city:str="", 
                  zipcode:str="", 
@@ -17,7 +15,9 @@ class User:
                  job:str="", 
                  relationship:str="", 
                  nb_kids:str="", 
-                 member_fonction:str="", 
+                 member_function:str="", 
+                 start_subscription:str="", 
+                 end_subscription:str="", 
                  activity:str="", 
                  member_id:str="",
                  ID:int=0):
@@ -40,7 +40,7 @@ class User:
         self.job = job
         self.relationship = relationship
         self.nb_kids = nb_kids
-        self.member_fonction = member_fonction
+        self.member_function = member_function
         self.activity = activity
         self.member_id = member_id
 

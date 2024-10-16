@@ -29,7 +29,7 @@ class Database:
                     {DB_JOB} TEXT NOT NULL,
                     {DB_RELATIONSHIP_SITUATION} TEXT NOT NULL,
                     {DB_NB_KIDS} INTEGER NOT NULL,
-                    {DB_MEMBERSHIP_NUMBER} TEXT NOT NULL UNIQUE,
+                    {DB_MEMBERSHIP_ID} TEXT NOT NULL UNIQUE,
                     {DB_MEMBERSHIP_FONCTION} TEXT NOT NULL,
                     {DB_ACTIVITY} BOOLEAN
                 )
@@ -43,12 +43,16 @@ class Database:
 
     # Function use to load data from the database
     def load_data(self)->list:
-        conn = sq.connect(self.filename)
-        cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM {TABLE}")
-        data = cursor.fetchall()
-        conn.close()
-        return data
+        try:
+            conn = sq.connect(self.filename)
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT * FROM {TABLE}")
+            data = cursor.fetchall()
+            conn.close()
+            return data
+        except Exception as e:
+            print(e)
+            return []
 
     # Function use to save data into the database
     def save_data(self, data:list)->bool:
@@ -68,12 +72,16 @@ class Database:
 
     # Function use to select items in the database
     def get_items(self, conditions:str)->list:
-        conn = sq.connect(self.filename)
-        cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM {TABLE} WHERE {conditions}")
-        data = cursor.fetchall()
-        conn.close()
-        return data
+        try:
+            conn = sq.connect(self.filename)
+            cursor = conn.cursor()
+            cursor.execute(f"SELECT * FROM {TABLE} WHERE {conditions}")
+            data = cursor.fetchall()
+            conn.close()
+            return data
+        except Exception as e:
+            print(e)
+            return []
 
     def insert_user(self, user:User):
         try:
@@ -127,7 +135,7 @@ class Database:
     def generer_identifiant(self)->str:
         conn = sq.connect(self.filename)
         cursor = conn.cursor()
-        cursor.execute(f'SELECT {DB_MEMBERSHIP_NUMBER} FROM {TABLE}')
+        cursor.execute(f'SELECT {DB_MEMBERSHIP_ID} FROM {TABLE}')
         ids = cursor.fetchall()
         conn.close()
 
