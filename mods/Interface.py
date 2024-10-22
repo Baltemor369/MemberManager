@@ -1,11 +1,10 @@
 import tkinter as tk
 import re
-import datetime 
 from tkinter import ttk
 from const import *
-from User import User
-from Database import Database
-from Tools import format_date
+from mods.User import User
+from mods.Database import Database
+from mods.Tools import format_date, clear_input
 
 class Interface:
     def __init__(self):
@@ -29,7 +28,7 @@ class Interface:
 
         self.tree["columns"] = attributes[1:]
         # Définir les colonnes & entêtes
-        self.tree.column("#0", width=0)
+        self.tree.column("#0", width=0, stretch=tk.NO)
         self.tree.heading("#0", text="", anchor=tk.CENTER)
         for col in attributes[1:]:
             self.tree.column(col, anchor=tk.CENTER, width=80)
@@ -77,7 +76,7 @@ class Interface:
         
         # update tree data
         for elt in self.db.load_data():
-            self.tree.insert("", tk.END, values=elt)
+            self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
 
         # display table
         self.tree.pack()
@@ -128,6 +127,7 @@ class Interface:
         first_name_entry = tk.Entry(frameTL)
         first_name_entry.insert(0, self.session_state[KEY_USER].first_name)
         first_name_entry.pack(pady=5)
+        first_name_entry.focus_set()
 
         tk.Label(frameTL, text=ATTR[DB_LAST_NAME], **LABEL_STYLE).pack(pady=5)
         last_name_entry = tk.Entry(frameTL)
@@ -161,9 +161,9 @@ class Interface:
         birthday_entry.pack(pady=5)
         
         tk.Label(frameTL, text=ATTR[DB_BIRTHDAY_LOCATION], **LABEL_STYLE).pack(pady=5)
-        birthday_entry = tk.Entry(frameTL)
-        birthday_entry.insert(0, self.session_state[KEY_USER].birthday_location)
-        birthday_entry.pack(pady=5)
+        birth_location_entry = tk.Entry(frameTL)
+        birth_location_entry.insert(0, self.session_state[KEY_USER].birthday_location)
+        birth_location_entry.pack(pady=5)
 
         # Informations de Contact
         frameTR = tk.LabelFrame(frame_body, text=TXT_CONTACT_INFO, **LABEL_STYLE)
@@ -235,14 +235,14 @@ class Interface:
         membership_function_entry.pack(pady=5)
 
         tk.Label(frameBR, text=ATTR[DB_START_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
-        start_suscription_entry = tk.Entry(frameBR)
-        start_suscription_entry.insert(0, self.session_state[KEY_USER].start_subscription)
-        start_suscription_entry.pack(pady=5)
+        start_subscription_entry = tk.Entry(frameBR)
+        start_subscription_entry.insert(0, self.session_state[KEY_USER].start_subscription)
+        start_subscription_entry.pack(pady=5)
 
         tk.Label(frameBR, text=ATTR[DB_END_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
-        end_suscription_entry = tk.Entry(frameBR)
-        end_suscription_entry.insert(0, self.session_state[KEY_USER].end_subscription)
-        end_suscription_entry.pack(pady=5)
+        end_subscription_entry = tk.Entry(frameBR)
+        end_subscription_entry.insert(0, self.session_state[KEY_USER].end_subscription)
+        end_subscription_entry.pack(pady=5)
 
         tk.Label(frameBR, text=ATTR[DB_ACTIVITY], **LABEL_STYLE).pack(pady=5)
         activity_entry = ttk.Combobox(frameBR, values=LIST_ACTIF, width=12)
@@ -260,8 +260,8 @@ class Interface:
                 day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
                 nationality=nationality_entry.get().capitalize(),
-                birthday=format_date(birthday_entry.get()),
-                birthday_location=birthday_entry.get().capitalize(),
+                birthday=birthday_entry.get(),
+                birthday_location=birth_location_entry.get().capitalize(),
                 address=address_entry.get(),
                 city=city_entry.get().capitalize(),
                 zipcode=zipcode_entry.get(),
@@ -271,8 +271,8 @@ class Interface:
                 relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
                 member_function=membership_function_entry.get(),
-                start_subscription=format_date(start_suscription_entry.get()),
-                end_subscription=format_date(end_suscription_entry.get()),
+                start_subscription=start_subscription_entry.get(),
+                end_subscription=end_subscription_entry.get(),
                 activity=activity_entry.get(),
                 member_id=self.db.generer_identifiant(),
                 )
@@ -285,8 +285,8 @@ class Interface:
                 day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
                 nationality=nationality_entry.get().capitalize(),
-                birthday=format_date(birthday_entry.get()),
-                birthday_location=birthday_entry.get().capitalize(),
+                birthday=birthday_entry.get(),
+                birthday_location=birth_location_entry.get().capitalize(),
                 address=address_entry.get(),
                 city=city_entry.get().capitalize(),
                 zipcode=zipcode_entry.get(),
@@ -296,8 +296,8 @@ class Interface:
                 relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
                 member_function=membership_function_entry.get(),
-                start_subscription=format_date(start_suscription_entry.get()),
-                end_subscription=format_date(end_suscription_entry.get()),
+                start_subscription=start_subscription_entry.get(),
+                end_subscription=end_subscription_entry.get(),
                 activity=activity_entry.get(),
                 member_id=self.session_state[KEY_USER].member_id,
                 id=self.session_state[KEY_USER].id
@@ -343,9 +343,13 @@ class Interface:
         selected_item = self.tree.selection()[0]
         item = self.tree.item(selected_item)
         # get its id
-        id = str(item["values"][0])
+        id = str(item["text"])
         # delete user from the database
-        self.db.delete_user(id)
+        if not self.db.delete_user(id):
+            self.session_state[KEY_ALERT] = (MSG_USER_NOT_FIND, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return
+        
         # delete user from the treeview
         self.tree.delete(selected_item)
 
@@ -361,13 +365,15 @@ class Interface:
         
         # get the element selected
         selected_item = self.tree.selection()[0]
+        
         # get values from the element
         item = self.tree.item(selected_item, "values")
+        tmp_id = self.tree.item(selected_item, "text")
+        
         print(item)
-        tmp_id = item[0]
-        item = item[1:]
         # session state update 
-        self.session_state[KEY_USER] = User(*item, id=tmp_id)
+        self.session_state[KEY_USER] = User(*item, ID=tmp_id)
+        
         # form display
         self.session_state[KEY_FORM] = VAL_MODIFY
         self.add_window()
@@ -393,11 +399,26 @@ class Interface:
         self.main_window()
 
     def verify_inputs(self, user:User):
-        
         ## verify inputs format
+        # clearing inputs
+        user.first_name = clear_input(user.first_name)
+        user.last_name = clear_input(user.last_name)
+        user.day_last_name = clear_input(user.day_last_name)
+        user.civility = clear_input(user.civility)
+        user.nationality = clear_input(user.nationality)
+        user.address = clear_input(user.address)
+        user.city = clear_input(user.city)
+        user.zipcode = clear_input(user.zipcode)
+        user.email = clear_input(user.email)
+        user.phone = clear_input(user.phone)
+        user.job = clear_input(user.job)
+        user.relationship = clear_input(user.relationship)
+        user.nb_kids = clear_input(user.nb_kids)
+        user.member_function = clear_input(user.member_function)
+        user.activity = clear_input(user.activity)
         
-        # check firstname and lastname is only with letters
-        if not (user.first_name.isalpha() and user.last_name.isalpha() and user.day_last_name.isalpha()):
+        # check firstname and lastname and birth last name REGEX_NAME
+        if not (re.match(REGEX_NAME, user.first_name) and re.match(REGEX_NAME, user.last_name) and (user.day_last_name=="" or re.match(REGEX_NAME, user.day_last_name))):
             self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
@@ -422,7 +443,7 @@ class Interface:
        # check birth location
 
         # check date start & end subscribe
-        if not format_date(user.start_suscription) or not format_date(user.end_suscription):
+        if not (format_date(user.start_subscription) and (user.end_subscription=="" or format_date(user.end_subscription))):
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
@@ -444,7 +465,7 @@ class Interface:
         # check job
         
         # check relationship situation from the list
-        if not user.relationship_situation in LIST_RELATIONSHIP:
+        if not user.relationship in LIST_RELATIONSHIP:
             self.session_state[KEY_ALERT] = (MSG_INVALID_RELATIONSHIP, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
         

@@ -77,7 +77,6 @@ MSG_ADD_SUCCESS="Personne ajouté avec succès"
 MSG_MODIFY_SUCCESS="Personne modifié avec succès"
 MSG_DEL_SUCCESS="Personne supprimé avec succès"
 MSG_CSV_SUCCESS="Exportation CSV avec succès"
-
 # error msg
 # add form
 MSG_INVALID_NAME="Prénom ou nom : format invalide (lettre et \"-' \" uniquement)"
@@ -121,13 +120,56 @@ TXT_ASSOCIATION_INFO="Informations association"
 LIST_CIVILITY = ["M","Mme","Mlle"]
 LIST_FUNCTION = ["Membre","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
-LIST_NATION = ["France","Allemagne","Belgique"]
+LIST_NATION = [
+    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
+    "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
+    "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
+    "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
+    "Bolivia", "Bosnia and Herzegovina", "Botswana", "Brazil", "Brunei",
+    "Bulgaria", "Burkina Faso", "Burundi", "Cabo Verde", "Cambodia",
+    "Cameroon", "Canada", "Central African Republic", "Chad", "Chile",
+    "China", "Colombia", "Comoros", "Congo (Congo-Brazzaville)", "Costa Rica",
+    "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)", "Denmark",
+    "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
+    "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini (fmr. 'Swaziland')",
+    "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+    "Gambia", "Georgia", "Germany", "Ghana", "Greece",
+    "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
+    "Haiti", "Honduras", "Hungary", "Iceland", "India",
+    "Indonesia", "Iran", "Iraq", "Ireland", "Israel",
+    "Italy", "Jamaica", "Japan", "Jordan", "Kazakhstan",
+    "Kenya", "Kiribati", "Kuwait", "Kyrgyzstan", "Laos",
+    "Latvia", "Lebanon", "Lesotho", "Liberia", "Libya",
+    "Liechtenstein", "Lithuania", "Luxembourg", "Madagascar", "Malawi",
+    "Malaysia", "Maldives", "Mali", "Malta", "Marshall Islands",
+    "Mauritania", "Mauritius", "Mexico", "Micronesia", "Moldova",
+    "Monaco", "Mongolia", "Montenegro", "Morocco", "Mozambique",
+    "Myanmar (formerly Burma)", "Namibia", "Nauru", "Nepal", "Netherlands",
+    "New Zealand", "Nicaragua", "Niger", "Nigeria", "North Korea",
+    "North Macedonia", "Norway", "Oman", "Pakistan", "Palau",
+    "Palestine State", "Panama", "Papua New Guinea", "Paraguay", "Peru",
+    "Philippines", "Poland", "Portugal", "Qatar", "Romania",
+    "Russia", "Rwanda", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines",
+    "Samoa", "San Marino", "Sao Tome and Principe", "Saudi Arabia", "Senegal",
+    "Serbia", "Seychelles", "Sierra Leone", "Singapore", "Slovakia",
+    "Slovenia", "Solomon Islands", "Somalia", "South Africa", "South Korea",
+    "South Sudan", "Spain", "Sri Lanka", "Sudan", "Suriname",
+    "Sweden", "Switzerland", "Syria", "Tajikistan", "Tanzania",
+    "Thailand", "Timor-Leste", "Togo", "Tonga", "Trinidad and Tobago",
+    "Tunisia", "Turkey", "Turkmenistan", "Tuvalu", "Uganda",
+    "Ukraine", "United Arab Emirates", "United Kingdom", "United States of America", "Uruguay",
+    "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen",
+    "Zambia", "Zimbabwe"
+]
 LIST_ACTIF = ["Actif","Inactif"]
+LIST_SUS_CHAR = ["--"]
 
 # Regex
 REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
-REGEX_DATE_1 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{2})$"
-REGEX_DATE_2 = r"(\d{2})[\/-]?(\d{2})[\/-]?(\d{4})$"
+REGEX_DATE_1 = r"(\d{2})[\/\-.]?(\d{2})[\/\-.]?(\d{2})$"
+REGEX_DATE_2 = r"(\d{2})[\/\-.]?(\d{2})[\/\-.]?(\d{4})$"
+REGEX_NAME = r"^[a-zA-Z\s-]+$"
+REGEX_SANITIZED = r"[\'\";\\\n\t|><()&*#%]"
 
 # Key
 KEY_ALERT="Alert"

@@ -1,7 +1,7 @@
 import sqlite3 as sq
 import csv
 from const import *
-from User import *
+from mods.User import *
 
 class Database:
     def __init__(self, filename:str)->bool:
@@ -60,14 +60,35 @@ class Database:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT OR IGNORE INTO {TABLE} ({User.__attr__()})
-                VALUES ({"?," * (len(User.__attr__()-1))}?)
+                INSERT OR IGNORE INTO {TABLE} (
+                    {DB_ID},
+                    {DB_FIRST_NAME},
+                    {DB_LAST_NAME},
+                    {DB_BIRTHDAY_LAST_NAME},
+                    {DB_CIVILITY},
+                    {DB_NATIONALITY},
+                    {DB_BIRTHDAY},
+                    {DB_BIRTHDAY_LOCATION},
+                    {DB_START_SUSCRIPTION},
+                    {DB_END_SUSCRIPTION},
+                    {DB_ADDRESS},
+                    {DB_CITY},
+                    {DB_ZIPCODE},
+                    {DB_EMAIL},
+                    {DB_PHONE},
+                    {DB_JOB},
+                    {DB_RELATIONSHIP_SITUATION},
+                    {DB_NB_KIDS},
+                    {DB_MEMBERSHIP_ID},
+                    {DB_MEMBERSHIP_FONCTION},
+                    {DB_ACTIVITY})
+                VALUES ({"?," * (len(User().__attr__())-1)}?)
             """, data)
             conn.commit()
             conn.close()
             return True
         except Exception as e:
-            print(e)
+            print(f"Unexpected Error : {e}")
             return False
 
     # Function use to select items in the database
@@ -88,8 +109,8 @@ class Database:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT INTO {TABLE} ({User.__attr__()})
-                VALUES ({"?," * (len(User.__attr__()-1))})
+                INSERT INTO {TABLE} ({User().__attr__()})
+                VALUES ({"?," * (len(User().__attr__())-1)}?)
             """, ({user.__list__()})
             )
             conn.commit()

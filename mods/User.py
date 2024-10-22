@@ -40,9 +40,9 @@ class User:
         self.job = job
         self.relationship = relationship
         self.nb_kids = nb_kids
+        self.member_id = member_id
         self.member_function = member_function
         self.activity = activity
-        self.member_id = member_id
 
     def __list__(self) -> list:
         """
