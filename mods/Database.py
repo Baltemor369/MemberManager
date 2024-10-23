@@ -56,6 +56,7 @@ class Database:
 
     # Function use to save data into the database
     def save_data(self, data:list)->bool:
+        print(data)
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()

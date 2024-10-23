@@ -316,6 +316,7 @@ class Interface:
             return
         
         # add the person to the database
+        print(user.__dict__)
         if not self.db.save_data(user.__list__()):
             self.session_state[KEY_ALERT] = (MSG_SAVING_DATA, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])

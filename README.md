@@ -25,13 +25,17 @@ lorem ipsum
 
 # Tests
 
-* Form add
+* display table
+* add elt
+  * list fonction : Président, secrétaire, trésorier, ONLY 1
 * delete elt
 * modify elt
 * export csv (compatible excel)
-* column sorting
-* research by id
+* sorting
+* research by member_id
 * advanced research
+* load DB
+* save DB
 
 ## TODO
 
