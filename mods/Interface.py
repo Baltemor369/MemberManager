@@ -300,7 +300,7 @@ class Interface:
                 end_subscription=end_subscription_entry.get(),
                 activity=activity_entry.get(),
                 member_id=self.session_state[KEY_USER].member_id,
-                id=self.session_state[KEY_USER].id
+                ID=self.session_state[KEY_USER].ID
                 )
             ), **BUTTON_STYLE).pack(pady=5)
 
@@ -367,12 +367,14 @@ class Interface:
         selected_item = self.tree.selection()[0]
         
         # get values from the element
-        item = self.tree.item(selected_item, "values")
+        values = self.tree.item(selected_item, "values")
+        columns = self.tree['columns']
+        data_dict = {columns[i]: values[i] for i in range(len(columns))}
+        
         tmp_id = self.tree.item(selected_item, "text")
         
-        print(item)
         # session state update 
-        self.session_state[KEY_USER] = User(*item, ID=tmp_id)
+        self.session_state[KEY_USER] = User(**data_dict, ID=tmp_id)
         
         # form display
         self.session_state[KEY_FORM] = VAL_MODIFY
@@ -389,7 +391,10 @@ class Interface:
             return
 
         # update user in the database
-        self.db.update_user(user)
+        if not self.db.update_user(user):
+            self.session_state[KEY_ALERT] = (MSG_UPDATE_DATA, RED)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])    
+            return
         # clear user
         user = None
         self.session_state[KEY_USER] = User()

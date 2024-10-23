@@ -101,6 +101,7 @@ MSG_NO_SELECTION="Aucune selection"
 MSG_USER_NOT_FIND="Erreur : User empty in add_client, contacter l'administrateur."
 MSG_CSV_ERROR="Erreur lors de l'exportation, contacter l'administrateur."
 MSG_SAVING_DATA="Erreur lors de la sauvegarde dans la BDD, contacter l'administrateur."
+MSG_UPDATE_DATA="Erreur lors de l'update dans la BDD, contacter l'administrateur."
 
 # Widgets text
 TXT_EXIT="Quitter"

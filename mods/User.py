@@ -7,6 +7,8 @@ class User:
                  nationality:str="", 
                  birthday:str="", 
                  birthday_location:str="", 
+                 start_subscription:str="", 
+                 end_subscription:str="", 
                  address:str="", 
                  city:str="", 
                  zipcode:str="", 
@@ -16,8 +18,6 @@ class User:
                  relationship:str="", 
                  nb_kids:str="", 
                  member_function:str="", 
-                 start_subscription:str="", 
-                 end_subscription:str="", 
                  activity:str="", 
                  member_id:str="",
                  ID:int=0):

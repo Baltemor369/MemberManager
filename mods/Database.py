@@ -135,15 +135,17 @@ class Database:
                 conn.close()
             return False
     
-    def update_user(self, user):
+    def update_user(self, user:User):
         try:
+            data = user.__list__()[1:]
+            data.append(user.__list__()[0])
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
                 UPDATE {TABLE}
-                SET 
-                WHERE {DB_ID} =?
-            """, )
+                SET {DB_FIRST_NAME} = ?, {DB_LAST_NAME} = ?, {DB_BIRTHDAY_LAST_NAME} = ?, {DB_CIVILITY} = ?, {DB_NATIONALITY} = ?, {DB_BIRTHDAY} = ?, {DB_BIRTHDAY_LOCATION} = ?, {DB_START_SUSCRIPTION} = ?, {DB_END_SUSCRIPTION} = ?, {DB_ADDRESS} = ?, {DB_CITY} = ?, {DB_ZIPCODE} = ?, {DB_EMAIL} = ?, {DB_PHONE} = ?, {DB_JOB} = ?, {DB_RELATIONSHIP_SITUATION} = ?, {DB_NB_KIDS} = ?, {DB_MEMBERSHIP_ID} = ?, {DB_MEMBERSHIP_FONCTION} = ?, {DB_ACTIVITY} = ?
+                WHERE {DB_ID} = ?
+            """, data)
             conn.commit()
             conn.close()
             return True
