@@ -3,9 +3,9 @@ APP_NAME="MyApp"
 TABLE="members"
 
 # Fonts
-FONT_TITLE = ("Arial", 17, "bold")
-FONT_MESSAGE = ("Arial", 17, "bold")
-FONT_LABEL = ("Arial", 13, "bold")
+FONT_TITLE = ("Arial", 27, "bold")
+FONT_MESSAGE = ("Arial", 21, "bold")
+FONT_LABEL = ("Arial", 18, "bold")
 
 # Colors
 DARKGREY = "#ABABAB"
@@ -67,6 +67,7 @@ ATTR = {
 
 # Values
 VAL_EMPTY=""
+VAL_NULL="0"
 VAL_ADD="Add"
 VAL_MODIFY="Modify"
 VAL_EMPTY_ALERT=("", None)
@@ -110,7 +111,10 @@ TXT_ADD="Ajouter"
 TXT_DEL="Supprimer"
 TXT_MODIFY="Modifier"
 TXT_EXPORT="Exporter"
-TXT_SEARCH="Rechecher par numéro adhérent :"
+TXT_SEARCH="Recherche"
+TXT_CLEAR="Réinitialiser"
+TXT_SEARCH_LABEL="Rechecher par numéro adhérent :"
+TXT_ADVANCED_SEARCH="Recherche avancée"
 TXT_PERSONAL_INFO="Informations personnelles"
 TXT_CONTACT_INFO="Informations de contact"
 TXT_SITUATION_INFO="Situation"
@@ -119,10 +123,10 @@ TXT_ASSOCIATION_INFO="Informations association"
 
 # List
 LIST_CIVILITY = ["M","Mme","Mlle"]
-LIST_FUNCTION = ["Membre","Vice Président","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Président"]
+LIST_FUNCTION = ["Membre","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Vice Président","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 LIST_NATION = [
-    "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
+    "France", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
     "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
     "Azerbaijan", "Bahamas", "Bahrain", "Bangladesh", "Barbados",
     "Belarus", "Belgium", "Belize", "Benin", "Bhutan",
@@ -133,7 +137,7 @@ LIST_NATION = [
     "Croatia", "Cuba", "Cyprus", "Czechia (Czech Republic)", "Denmark",
     "Djibouti", "Dominica", "Dominican Republic", "Ecuador", "Egypt",
     "El Salvador", "Equatorial Guinea", "Eritrea", "Estonia", "Eswatini (fmr. 'Swaziland')",
-    "Ethiopia", "Fiji", "Finland", "France", "Gabon",
+    "Ethiopia", "Fiji", "Finland", "Gabon",
     "Gambia", "Georgia", "Germany", "Ghana", "Greece",
     "Grenada", "Guatemala", "Guinea", "Guinea-Bissau", "Guyana",
     "Haiti", "Honduras", "Hungary", "Iceland", "India",
@@ -162,7 +166,7 @@ LIST_NATION = [
     "Uzbekistan", "Vanuatu", "Venezuela", "Vietnam", "Yemen",
     "Zambia", "Zimbabwe"
 ]
-LIST_ACTIF = ["Actif","Inactif"]
+LIST_ACTIF = ["Inactif","Actif"]
 LIST_SUS_CHAR = ["--"]
 
 # Regex
@@ -186,13 +190,19 @@ BUTTON_STYLE = {
     "width":9
 }
 
+BUTTON_STYLE_LONG = {
+    "bg":"#333333",
+    "fg":LIGHTWHITE,
+    "width":15
+}
+
 ROOT_STYLE = {
     "bg":LIGHTBLUE
 }
 
 ALERT_STYLE = {
-    "bg":LIGHTBLUE,
-    "font":FONT_MESSAGE
+    "font":FONT_MESSAGE,
+    "bg":LIGHTBLUE
 }
 
 LABEL_STYLE = {

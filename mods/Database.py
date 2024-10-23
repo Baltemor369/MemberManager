@@ -55,14 +55,12 @@ class Database:
             return []
 
     # Function use to save data into the database
-    def save_data(self, data:list)->bool:
-        print(data)
+    def save_data(self, user:User)->bool:
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT OR IGNORE INTO {TABLE} (
-                    {DB_ID},
+                INSERT INTO {TABLE} (
                     {DB_FIRST_NAME},
                     {DB_LAST_NAME},
                     {DB_BIRTHDAY_LAST_NAME},
@@ -83,8 +81,8 @@ class Database:
                     {DB_MEMBERSHIP_ID},
                     {DB_MEMBERSHIP_FONCTION},
                     {DB_ACTIVITY})
-                VALUES ({"?," * (len(User().__attr__())-1)}?)
-            """, data)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            """, (user.__list__()[1:]))
             conn.commit()
             conn.close()
             return True

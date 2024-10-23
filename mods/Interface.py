@@ -49,6 +49,10 @@ class Interface:
         exit_button = tk.Button(self.root, text=TXT_EXIT, command=self.exit, anchor=tk.CENTER, **BUTTON_STYLE)
         exit_button.pack(pady=5, padx=5, anchor="ne")
 
+        # create a title
+        tk.Label(self.root, text=APP_NAME, **TITLE_STYLE).pack(pady=10)
+        
+
         # Alert Frame to display a specific message
         alert_frame = tk.Frame(self.root, **ROOT_STYLE)
         alert_frame.pack(padx=10, pady=10)
@@ -60,20 +64,19 @@ class Interface:
         search_frame = tk.Frame(self.root, **ROOT_STYLE)
         search_frame.pack(padx=10, pady=10)
 
-        tk.Label(search_frame, text=TXT_SEARCH, **TITLE_STYLE).pack(pady=5, side="left")
+        tk.Label(search_frame, text=TXT_SEARCH_LABEL, **LABEL_STYLE).pack(pady=5, side="left")
 
         self.session_state[KEY_SEARCH] = tk.StringVar()
         self.session_state[KEY_SEARCH].trace_add("write", self.update_treeview)
         search_entry = tk.Entry(search_frame, width=30, textvariable=self.session_state[KEY_SEARCH])
         search_entry.pack(pady=5, padx=5, side="left")
 
+        tk.Button(search_frame, text=TXT_ADVANCED_SEARCH, command=self.open_advanced_search, **BUTTON_STYLE_LONG).pack(pady=5, padx=5)
+        tk.Button(search_frame, text=TXT_CLEAR, command=self.main_window, **BUTTON_STYLE_LONG).pack(pady=5, padx=5)
 
         # clear treeview data
         self.tree.delete(*self.tree.get_children())
-        
-        # retrieve original data
-        self.session_state[KEY_DATA]=self.db.load_data()
-        
+            
         # update tree data
         for elt in self.db.load_data():
             self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
@@ -316,8 +319,7 @@ class Interface:
             return
         
         # add the person to the database
-        print(user.__dict__)
-        if not self.db.save_data(user.__list__()):
+        if not self.db.save_data(user):
             self.session_state[KEY_ALERT] = (MSG_SAVING_DATA, RED)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
@@ -403,6 +405,191 @@ class Interface:
         self.session_state[KEY_ALERT] = (MSG_MODIFY_SUCCESS, GREEN)
         self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
         self.main_window()
+    
+    def open_advanced_search(self):
+        # clear user
+        self.session_state[KEY_USER] = User()
+
+        self.advanced_search_window = tk.Toplevel(self.root, **ROOT_STYLE)
+        self.advanced_search_window.title("Recherche avancée")
+
+        # main Frame
+        frame_body = tk.Frame(self.advanced_search_window, **ROOT_STYLE)
+        frame_body.pack(padx=10, pady=10)
+
+        # Personnal information
+        frameTL = tk.LabelFrame(frame_body, text=TXT_PERSONAL_INFO, **LABEL_STYLE)
+        frameTL.pack(side="left", padx=15)
+
+        tk.Label(frameTL, text=ATTR[DB_FIRST_NAME], **LABEL_STYLE).pack(pady=5)
+        first_name_entry = tk.Entry(frameTL)
+        first_name_entry.insert(0, self.session_state[KEY_USER].first_name)
+        first_name_entry.pack(pady=5)
+        first_name_entry.focus_set()
+
+        tk.Label(frameTL, text=ATTR[DB_LAST_NAME], **LABEL_STYLE).pack(pady=5)
+        last_name_entry = tk.Entry(frameTL)
+        last_name_entry.insert(0, self.session_state[KEY_USER].last_name)
+        last_name_entry.pack(pady=5)
+        
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY_LAST_NAME], **LABEL_STYLE).pack(pady=5)
+        birth_last_name_entry = tk.Entry(frameTL)
+        birth_last_name_entry.insert(0, self.session_state[KEY_USER].day_last_name)
+        birth_last_name_entry.pack(pady=5)
+
+        tk.Label(frameTL, text=ATTR[DB_CIVILITY], **LABEL_STYLE).pack(pady=5)
+        civility_entry = ttk.Combobox(frameTL, values=[""] + LIST_CIVILITY, width=8)
+        if self.session_state[KEY_USER].civility:
+            civility_entry.current(LIST_CIVILITY.index(self.session_state[KEY_USER].civility))
+        else:
+            civility_entry.current(0)
+        civility_entry.pack(pady=5)
+
+        tk.Label(frameTL, text=ATTR[DB_NATIONALITY], **LABEL_STYLE).pack(pady=5)
+        nationality_entry = ttk.Combobox(frameTL, values=[""] + LIST_NATION, width=8)
+        if self.session_state[KEY_USER].nationality:
+            nationality_entry.current(LIST_NATION.index(self.session_state[KEY_USER].nationality))
+        else:
+            nationality_entry.current(0)
+        nationality_entry.pack(pady=5)
+
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY], **LABEL_STYLE).pack(pady=5)
+        birthday_entry = tk.Entry(frameTL)
+        birthday_entry.insert(0, self.session_state[KEY_USER].birthday)
+        birthday_entry.pack(pady=5)
+        
+        tk.Label(frameTL, text=ATTR[DB_BIRTHDAY_LOCATION], **LABEL_STYLE).pack(pady=5)
+        birth_location_entry = tk.Entry(frameTL)
+        birth_location_entry.insert(0, self.session_state[KEY_USER].birthday_location)
+        birth_location_entry.pack(pady=5)
+
+        # Informations de Contact
+        frameTR = tk.LabelFrame(frame_body, text=TXT_CONTACT_INFO, **LABEL_STYLE)
+        frameTR.pack(side="left", padx=15)
+
+        tk.Label(frameTR, text=ATTR[DB_ADDRESS], **LABEL_STYLE).pack(pady=5)
+        address_entry = tk.Entry(frameTR)
+        address_entry.insert(0, self.session_state[KEY_USER].address)
+        address_entry.pack(pady=5)
+
+        tk.Label(frameTR, text=ATTR[DB_CITY], **LABEL_STYLE).pack(pady=5)
+        city_entry = tk.Entry(frameTR)
+        city_entry.insert(0, self.session_state[KEY_USER].city)
+        city_entry.pack(pady=5)
+
+        tk.Label(frameTR, text=ATTR[DB_ZIPCODE], **LABEL_STYLE).pack(pady=5)
+        zipcode_entry = tk.Entry(frameTR)
+        zipcode_entry.insert(0, self.session_state[KEY_USER].zipcode)
+        zipcode_entry.pack(pady=5)
+
+        tk.Label(frameTR, text=ATTR[DB_EMAIL], **LABEL_STYLE).pack(pady=5)
+        email_entry = tk.Entry(frameTR)
+        email_entry.insert(0, self.session_state[KEY_USER].email)
+        email_entry.pack(pady=5)
+
+        tk.Label(frameTR, text=ATTR[DB_PHONE], **LABEL_STYLE).pack(pady=5)
+        frame_phone = tk.Frame(frameTR, **ROOT_STYLE)
+        frame_phone.pack()
+
+        phone_entry = tk.Entry(frame_phone)
+        phone_entry.insert(0, self.session_state[KEY_USER].phone)
+        phone_entry.pack(pady=5, side="left")
+
+        # Situation
+        frameBL = tk.LabelFrame(frame_body, text=TXT_SITUATION_INFO, **LABEL_STYLE)
+        frameBL.pack(side="left", padx=15)
+
+        tk.Label(frameBL, text=ATTR[DB_JOB], **LABEL_STYLE).pack(pady=5)
+        job_entry = tk.Entry(frameBL)
+        job_entry.insert(0, self.session_state[KEY_USER].job)
+        job_entry.pack(pady=5)
+
+        tk.Label(frameBL, text=ATTR[DB_RELATIONSHIP_SITUATION], **LABEL_STYLE).pack(pady=5)
+        relationship_situation_entry = ttk.Combobox(frameBL, values=[""] + LIST_RELATIONSHIP, width=10)
+        if self.session_state[KEY_USER].relationship:
+            relationship_situation_entry.current(LIST_RELATIONSHIP.index(self.session_state[KEY_USER].relationship))
+        else:
+            relationship_situation_entry.current(0)
+        relationship_situation_entry.pack(pady=5)
+
+        tk.Label(frameBL, text=ATTR[DB_NB_KIDS], **LABEL_STYLE).pack(pady=5)
+        nb_kids_entry = ttk.Combobox(frameBL, values=[""] + list(range(0,21)), width=5)
+        if self.session_state[KEY_USER].nb_kids:
+            nb_kids_entry.current(self.session_state[KEY_USER].nb_kids)
+        else:
+            nb_kids_entry.current(0)
+        nb_kids_entry.pack(pady=5)
+
+        # Information dans l'association
+        frameBR = tk.LabelFrame(frame_body, text=TXT_ASSOCIATION_INFO, **LABEL_STYLE)
+        frameBR.pack(side="left", padx=15)
+
+        tk.Label(frameBR, text=ATTR[DB_MEMBERSHIP_FONCTION], **LABEL_STYLE).pack(pady=5)
+        membership_function_entry = ttk.Combobox(frameBR, values=[""] + LIST_FUNCTION, width=12)
+        if self.session_state[KEY_USER].member_function:
+            membership_function_entry.current(LIST_FUNCTION.index(self.session_state[KEY_USER].member_function))
+        else:
+            membership_function_entry.current(0)
+        membership_function_entry.pack(pady=5)
+
+        tk.Label(frameBR, text=ATTR[DB_START_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
+        start_subscription_entry = tk.Entry(frameBR)
+        start_subscription_entry.insert(0, self.session_state[KEY_USER].start_subscription)
+        start_subscription_entry.pack(pady=5)
+
+        tk.Label(frameBR, text=ATTR[DB_END_SUSCRIPTION], **LABEL_STYLE).pack(pady=5)
+        end_subscription_entry = tk.Entry(frameBR)
+        end_subscription_entry.insert(0, self.session_state[KEY_USER].end_subscription)
+        end_subscription_entry.pack(pady=5)
+
+        tk.Label(frameBR, text=ATTR[DB_ACTIVITY], **LABEL_STYLE).pack(pady=5)
+        activity_entry = ttk.Combobox(frameBR, values=[""] + LIST_ACTIF, width=12)
+        if self.session_state[KEY_USER].activity:
+            activity_entry.current(LIST_ACTIF.index(self.session_state[KEY_USER].activity))
+        else:
+            activity_entry.current(0)
+        activity_entry.pack(pady=5)
+        
+        search_button = tk.Button(self.advanced_search_window, text=TXT_SEARCH, command=lambda : self.advanced_research(User(
+                first_name=first_name_entry.get().capitalize(),
+                last_name=last_name_entry.get().capitalize(),
+                day_last_name=birth_last_name_entry.get().capitalize(),
+                civility=civility_entry.get(),
+                nationality=nationality_entry.get().capitalize(),
+                birthday=birthday_entry.get(),
+                birthday_location=birth_location_entry.get().capitalize(),
+                address=address_entry.get(),
+                city=city_entry.get().capitalize(),
+                zipcode=zipcode_entry.get(),
+                email=email_entry.get(),
+                phone=phone_entry.get(),
+                job=job_entry.get().capitalize(),
+                relationship=relationship_situation_entry.get(),
+                nb_kids=nb_kids_entry.get(),
+                member_function=membership_function_entry.get(),
+                start_subscription=start_subscription_entry.get(),
+                end_subscription=end_subscription_entry.get(),
+                activity=activity_entry.get(),
+                )), **BUTTON_STYLE)
+        search_button.pack(pady=20)
+    
+    def advanced_research(self, user:User):
+        # destroy window
+        self.advanced_search_window.destroy()
+
+        # clear treeview
+        self.tree.delete(*self.tree.get_children())
+        
+        # search elts
+        for item in self.db.load_data():
+            user_val = user.__list__()
+            find = True
+            for val in user_val[1:]:
+                if val and val not in item:
+                    find = False
+            if find:
+                self.tree.insert("", tk.END, text=item[0], values=item[1:])
+                break
 
     def verify_inputs(self, user:User):
         ## verify inputs format
@@ -505,12 +692,13 @@ class Interface:
     
     # Fonction de filtrage
     def update_treeview(self, *args):
-        search_term = self.session_state[KEY_SEARCH].get().lower()
+        search_term = self.session_state[KEY_SEARCH].get()
         self.tree.delete(*self.tree.get_children())
         
-        for item in self.session_state[KEY_DATA]:
-            if search_term in item[-2].lower():
-                self.tree.insert("", "end", values=item)
+        for item in self.db.load_data():
+            print(item)
+            if search_term.lower() in item[-3].lower():
+                self.tree.insert("", tk.END, text=item[0], values=item[1:])
 
     def exporter(self):
         try:

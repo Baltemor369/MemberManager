@@ -27,7 +27,6 @@ lorem ipsum
 
 * display table
 * add elt
-  * list fonction : Président, secrétaire, trésorier, ONLY 1
 * delete elt
 * modify elt
 * export csv (compatible excel)
@@ -41,7 +40,9 @@ lorem ipsum
 
 Ajouts :
 - membre expiré => grisé (conservation des informations)
-- recherche avancé
+- recherche avancé : permettre information incomplète ?
+- bind enter and confirm form
+- fct for display full table ( optimize clear_search function)
 
 modification :
 - Fonction : Président, secrétaire, trésorier, ONLY 1
