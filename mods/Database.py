@@ -171,15 +171,17 @@ class Database:
     
     def export_csv(self):
         conn = sq.connect(self.filename)
+        conn.execute('PRAGMA encoding="UTF-8"')
         cursor = conn.cursor()
         cursor.execute(f"SELECT * FROM {TABLE}")
         data = cursor.fetchall()
+
         # get column's names
         column_names = [description[0] for description in cursor.description]
 
         # CSV Creation
-        with open('members.csv', 'w', newline='') as csvfile:
-            csvwriter = csv.writer(csvfile)
+        with open('members.csv', 'w', newline='', encoding='utf-8-sig') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
             
             # Write column names
             csvwriter.writerow(column_names)

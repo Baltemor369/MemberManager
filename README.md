@@ -41,13 +41,7 @@ Ajouts :
 
 modification :
 - Fonction : Président, secrétaire, trésorier, ONLY 1
-- exportation pour excel sans pb
 - exportation sans les inactif
-- Civilité (M,Mme,Mlle)
-- date fin empty
-
-suppression :
-- ne pas afficher colum "id" 
 
 membre :
 - db id
