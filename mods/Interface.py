@@ -580,16 +580,19 @@ class Interface:
         # clear treeview
         self.tree.delete(*self.tree.get_children())
         
+        user_values = user.__list__()
+
         # search elts
         for item in self.db.load_data():
-            user_val = user.__list__()
+            print("ITEM ",item)
             find = True
-            for val in user_val[1:]:
-                if val and val not in item:
-                    find = False
+            for i in range(1,len(user_values)):
+                if user_values[i]:
+                    print("VAL", user_values[i])
+                    if user_values[i] not in str(item[i]):
+                        find = False
             if find:
                 self.tree.insert("", tk.END, text=item[0], values=item[1:])
-                break
 
     def verify_inputs(self, user:User):
         ## verify inputs format
@@ -715,7 +718,10 @@ class Interface:
     # undisplay widgets in window (not destroy)
     def clear_window(self, window):
         for widget in window.winfo_children():
-            widget.pack_forget()
+            try:
+                widget.pack_forget()
+            except:
+                pass
     
     # start the main application loop
     def run(self):
