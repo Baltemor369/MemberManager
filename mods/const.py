@@ -78,8 +78,6 @@ VAL_EMPTY=""
 VAL_NULL="0"
 VAL_ADD="Add"
 VAL_MODIFY="Modify"
-VAL_ACTIVE="Actif"
-VAL_INACTIVE="Inactif"
 VAL_EMPTY_ALERT=("", None)
 
 # Messages
@@ -134,7 +132,7 @@ TXT_ASSOCIATION_INFO="Informations association"
 
 # List
 LIST_CIVILITY = ["M","Mme","Mlle"]
-LIST_FUNCTION = ["Membre", "Secrétaire adjoint","Secrétaire","Trésorier adjoint", "Trésorier","Vice Président","Président"]
+LIST_FUNCTION = ["Membre","Secrétaire", "Secrétaire adjoint", "Trésorier","Trésorier adjoint","Vice Président","Président"]
 LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
 LIST_NATION = [
     "France", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",

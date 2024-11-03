@@ -79,8 +79,12 @@ class Interface:
             
         # update tree data
         for elt in self.db.load_data():
-            self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
-
+            if elt[-1] == VAL_ACTIVE:
+                self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
+            else:
+                self.tree.insert("", tk.END, text=elt[0], values=elt[1:], tag=(VAL_INACTIVE,))
+        
+        self.tree.tag_configure(VAL_INACTIVE, background="gray")
         # display table
         self.tree.pack()
 
@@ -263,7 +267,7 @@ class Interface:
                 day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
                 nationality=nationality_entry.get().capitalize(),
-                birthday=birthday_entry.get(),
+                birthday=format_date(birthday_entry.get()),
                 birthday_location=birth_location_entry.get().capitalize(),
                 address=address_entry.get(),
                 city=city_entry.get().capitalize(),
@@ -274,8 +278,8 @@ class Interface:
                 relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
                 member_function=membership_function_entry.get(),
-                start_subscription=start_subscription_entry.get(),
-                end_subscription=end_subscription_entry.get(),
+                start_subscription=format_date(start_subscription_entry.get()),
+                end_subscription=format_date(end_subscription_entry.get()),
                 activity=activity_entry.get(),
                 member_id=self.db.generer_identifiant(),
                 )
@@ -288,7 +292,7 @@ class Interface:
                 day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
                 nationality=nationality_entry.get().capitalize(),
-                birthday=birthday_entry.get(),
+                birthday=format_date(birthday_entry.get()),
                 birthday_location=birth_location_entry.get().capitalize(),
                 address=address_entry.get(),
                 city=city_entry.get().capitalize(),
@@ -299,8 +303,8 @@ class Interface:
                 relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
                 member_function=membership_function_entry.get(),
-                start_subscription=start_subscription_entry.get(),
-                end_subscription=end_subscription_entry.get(),
+                start_subscription=format_date(start_subscription_entry.get()),
+                end_subscription=format_date(end_subscription_entry.get()),
                 activity=activity_entry.get(),
                 member_id=self.session_state[KEY_USER].member_id,
                 ID=self.session_state[KEY_USER].ID
@@ -390,7 +394,7 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return
         
-        if not self.verify_inputs(user):
+        if not self.verify_inputs(user, True):
             return
 
         # update user in the database
@@ -556,7 +560,7 @@ class Interface:
                 day_last_name=birth_last_name_entry.get().capitalize(),
                 civility=civility_entry.get(),
                 nationality=nationality_entry.get().capitalize(),
-                birthday=birthday_entry.get(),
+                birthday=format_date(birthday_entry.get()),
                 birthday_location=birth_location_entry.get().capitalize(),
                 address=address_entry.get(),
                 city=city_entry.get().capitalize(),
@@ -567,8 +571,8 @@ class Interface:
                 relationship=relationship_situation_entry.get(),
                 nb_kids=nb_kids_entry.get(),
                 member_function=membership_function_entry.get(),
-                start_subscription=start_subscription_entry.get(),
-                end_subscription=end_subscription_entry.get(),
+                start_subscription=format_date(start_subscription_entry.get()),
+                end_subscription=format_date(end_subscription_entry.get()),
                 activity=activity_entry.get(),
                 )), **BUTTON_STYLE)
         search_button.pack(pady=20)
@@ -584,17 +588,15 @@ class Interface:
 
         # search elts
         for item in self.db.load_data():
-            print("ITEM ",item)
             find = True
             for i in range(1,len(user_values)):
                 if user_values[i]:
-                    print("VAL", user_values[i])
                     if user_values[i] not in str(item[i]):
                         find = False
             if find:
                 self.tree.insert("", tk.END, text=item[0], values=item[1:])
 
-    def verify_inputs(self, user:User):
+    def verify_inputs(self, user:User, modifying:bool=False):
         ## verify inputs format
         # clearing inputs
         user.first_name = clear_input(user.first_name)
@@ -612,7 +614,10 @@ class Interface:
         user.nb_kids = clear_input(user.nb_kids)
         user.member_function = clear_input(user.member_function)
         user.activity = clear_input(user.activity)
+
+        max = 1 if modifying else 0
         
+        # REQUIRED
         # check firstname and lastname and birth last name REGEX_NAME
         if not (re.match(REGEX_NAME, user.first_name) and re.match(REGEX_NAME, user.last_name) and (user.day_last_name=="" or re.match(REGEX_NAME, user.day_last_name))):
             self.session_state[KEY_ALERT] = (MSG_INVALID_NAME, ORANGE)
@@ -631,18 +636,28 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
+        # REQUIRED
         # check birthday format : DD-MM-YYYY
-        if format_date(user.birthday) is None:
+        if user.birthday is None:
             self.session_state[KEY_ALERT] = (MSG_INVALID_BIRTHDAY, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
        
-       # check birth location
+        # REQUIRED
+        # check birth location
+        if user.birthday_location is None:
+            self.session_state[KEY_ALERT] = (MSG_INVALID_LOCATION_BIRTHDAY, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
 
-        # check date start & end subscribe
-        if not (format_date(user.start_subscription) and (user.end_subscription=="" or format_date(user.end_subscription))):
+        # REQUIRED
+        # check date start
+        if user.start_subscription is None:
             self.session_state[KEY_ALERT] = (MSG_INVALID_SUSCRIPTION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
+        
+        # check date end subscribe
         
         # check address
         
@@ -664,6 +679,7 @@ class Interface:
         if not user.relationship in LIST_RELATIONSHIP:
             self.session_state[KEY_ALERT] = (MSG_INVALID_RELATIONSHIP, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
         
         # check number of kids : is a digit
         if not (user.nb_kids.isdigit() and int(user.nb_kids) >= 0):
@@ -676,6 +692,24 @@ class Interface:
         # check membership function from in the list
         if not user.member_function in LIST_FUNCTION:
             self.session_state[KEY_ALERT] = (MSG_INVALID_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+
+        result = self.db.get_items(member_function=ROLE_PRESIDENT)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+        
+        result = self.db.get_items(member_function=ROLE_SECRETARY)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+        
+        result = self.db.get_items(member_function=ROLE_TREASURER)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
@@ -699,7 +733,6 @@ class Interface:
         self.tree.delete(*self.tree.get_children())
         
         for item in self.db.load_data():
-            print(item)
             if search_term.lower() in item[-3].lower():
                 self.tree.insert("", tk.END, text=item[0], values=item[1:])
 

@@ -20,7 +20,7 @@ class Database:
                     {DB_BIRTHDAY} DATE NOT NULL,
                     {DB_BIRTHDAY_LOCATION} TEXT NOT NULL,
                     {DB_START_SUSCRIPTION} DATE NOT NULL,
-                    {DB_END_SUSCRIPTION} DATE NOT NULL,
+                    {DB_END_SUSCRIPTION} DATE,
                     {DB_ADDRESS} TEXT NOT NULL,
                     {DB_CITY} TEXT NOT NULL,
                     {DB_ZIPCODE} INTEGER NOT NULL,
@@ -91,17 +91,21 @@ class Database:
             return False
 
     # Function use to select items in the database
-    def get_items(self, conditions:str)->list:
+    def get_items(self, **kwargs) -> list:
+        cond = " AND ".join([f"{key} = ?" for key in kwargs.keys()])
+        values = tuple(kwargs.values())
+        
         try:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
-            cursor.execute(f"SELECT * FROM {TABLE} WHERE {conditions}")
+            cursor.execute(f"SELECT * FROM {TABLE} WHERE {cond}", values)
             data = cursor.fetchall()
             conn.close()
             return data
         except Exception as e:
             print(e)
             return []
+
 
     def insert_user(self, user:User):
         try:
@@ -172,11 +176,11 @@ class Database:
         conn = sq.connect(self.filename)
         conn.execute('PRAGMA encoding="UTF-8"')
         cursor = conn.cursor()
-        cursor.execute(f"SELECT * FROM {TABLE}")
+        cursor.execute(f"SELECT * FROM {TABLE} WHERE {DB_ACTIVITY}='{VAL_ACTIVE}'")
         data = cursor.fetchall()
 
         # get column's names
-        column_names = [description[0] for description in cursor.description]
+        column_names = [val for key,val in ATTR.items()]
 
         # CSV Creation
         with open('members.csv', 'w', newline='', encoding='utf-8-sig') as csvfile:

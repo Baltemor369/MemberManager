@@ -4,7 +4,7 @@ from datetime import datetime
 
 def format_date(date_str):
     # get a date DDMMYY
-    match = re.match(REGEX_DATE_1, date_str)
+    match = re.match(REGEX_DATE_6, date_str)
     if match:
         day,month,year = match.groups()
         # Obtenir l'année actuelle
@@ -17,7 +17,7 @@ def format_date(date_str):
             return None
 
     # get a date DDMMYYYY
-    match = re.match(REGEX_DATE_2, date_str)
+    match = re.match(REGEX_DATE_8, date_str)
     if match:
         day,month,year = match.groups()
         if valide_date(day,month,year):
@@ -61,3 +61,12 @@ def clear_input(user_input:str):
         user_input = user_input.replace(elt,"")
     clear_input = re.sub(REGEX_SANITIZED, "", user_input)
     return clear_input
+
+# test format_date
+# print(format_date("310121"))  # 31/01/2021
+# print(format_date("31.01.21"))  # 31/01/2021
+# print(format_date("31012020"))  # 31/01/2020
+# print(format_date("31-01-2020"))  # 31/01/2020
+# print(format_date("31012021A"))  # None
+# print(format_date("31012021 01/01/2021"))  # None
+# print(format_date("01/01/2021"))  # 01/01/2021

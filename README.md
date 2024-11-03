@@ -48,23 +48,17 @@ lorem ipsum
 
 ## TODO
 
-- membre expiré => grisé (conservation des informations)
 - bind enter and confirm form
-- export en fr
-- date dd/mm/yyyy
-- date + lieu naissance obligatoire
-- Fonction : Président, secrétaire, trésorier, ONLY 1
-- exportation sans les inactif
 
 ## Object 
 
 membre :
 - db id
-- prenom 
-- nom
+- prenom REQUIRED
+- nom REQUIRED
 - nom naissance
-- date naissance 
-- lieu naissance
+- date naissance REQUIRED
+- lieu naissance REQUIRED
 - civilité
 - nationalité
 - adresse
@@ -75,7 +69,7 @@ membre :
 - profession
 - situation familiale
 - nb enfant
-- date inscription
+- date inscription REQUIRED
 - fin inscription
 - asso fonction
 - asso id
