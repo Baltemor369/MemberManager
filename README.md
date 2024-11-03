@@ -26,27 +26,37 @@ lorem ipsum
 # Tests
 
 * display table
+  * OK
 * add elt
+  * format date
 * delete elt
+  * 
 * modify elt
+  * OK
 * export csv (compatible excel)
+  * OK
 * sorting
+  * OK
 * research by member_id
+  * OK
 * advanced research
+  * OK
 * load DB
+  * OK
 * save DB
+  * OK
 
 ## TODO
 
-Ajouts :
 - membre expiré => grisé (conservation des informations)
-- recherche avancé : permettre information incomplète ?
 - bind enter and confirm form
-- fct for display full table ( optimize clear_search function)
-
-modification :
+- export en fr
+- date dd/mm/yyyy
+- date + lieu naissance obligatoire
 - Fonction : Président, secrétaire, trésorier, ONLY 1
 - exportation sans les inactif
+
+## Object 
 
 membre :
 - db id
