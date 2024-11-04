@@ -579,7 +579,7 @@ class Interface:
     
     def advanced_research(self, user:User):
         # destroy window
-        self.advanced_search_window.destroy()
+        # self.advanced_search_window.destroy()
 
         # clear treeview
         self.tree.delete(*self.tree.get_children())
@@ -764,6 +764,7 @@ class Interface:
         self.session_state[KEY_ALERT]=("",None)
         self.session_state[KEY_USER]=User()
         self.main_window()
+    
     # exit the app and all other process need to be stop separately
     def exit(self):
         self.root.quit()
