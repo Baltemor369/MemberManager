@@ -1,76 +1,31 @@
 # Members Manager
 
-lorem ipsum
+Simple Tkinter tool use for members manager in a association.
 
 ## Requirements
 
-* [Python]
+* [Python 3.12.3](https://www.python.org/downloads/)
 
 ## Installation
 
-lorem ipsum
+1. Download the zip of the project.
+2. unpack it
+3. run the .bat launcher
+  3.1 Windows may tell you the software isn't secure, it's because a Microsoft Licence is missing. You can skip.
 
-## Utilisation
+## Use
 
-lorem ipsum
+A treeview to display data from the database
+A add form to add or modify elements.
+Export your data.
+Sort treeview by clicking on columns name.
+Filter data with search tool (by id or a more specific with advanced searching tool).
 
-## Technologie
+## Technologies
 
 * BBD : Sqlite3 
 * Interface : Tkinter
 
 ## Contributions
 
-lorem ipsum
-
-# Tests
-
-* display table
-  * OK
-* add elt
-  * format date
-* delete elt
-  * 
-* modify elt
-  * OK
-* export csv (compatible excel)
-  * OK
-* sorting
-  * OK
-* research by member_id
-  * OK
-* advanced research
-  * OK
-* load DB
-  * OK
-* save DB
-  * OK
-
-## TODO
-
-- bind enter and confirm form
-
-## Object 
-
-membre :
-- db id
-- prenom REQUIRED
-- nom REQUIRED
-- nom naissance
-- date naissance REQUIRED
-- lieu naissance REQUIRED
-- civilité
-- nationalité
-- adresse
-- ville
-- code postal
-- email
-- telephone
-- profession
-- situation familiale
-- nb enfant
-- date inscription REQUIRED
-- fin inscription
-- asso fonction
-- asso id
-- actif
+[@Baltemor369](https://github.com/Baltemor369)
