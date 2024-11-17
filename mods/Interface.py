@@ -1,7 +1,7 @@
 import tkinter as tk
 import re
 from tkinter import ttk
-from const import *
+from .const import *
 from mods.User import User
 from mods.Database import Database
 from mods.Tools import format_date, clear_input
@@ -11,6 +11,7 @@ class Interface:
         self.db = Database(FILENAME)
         self.root = tk.Tk()
         self.root.title(APP_NAME)
+        # self.root.iconbitmap(ICONNAME)
         
         self.root.state('zoomed')
 
@@ -615,7 +616,7 @@ class Interface:
         user.member_function = clear_input(user.member_function)
         user.activity = clear_input(user.activity)
 
-        max = 1 if modifying else 0
+        max = 1
         
         # REQUIRED
         # check firstname and lastname and birth last name REGEX_NAME
@@ -701,13 +702,31 @@ class Interface:
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
+        result = self.db.get_items(member_function=ROLE_VICE_PRESIDENT)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+        
         result = self.db.get_items(member_function=ROLE_SECRETARY)
         if len(result) > max:
             self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
         
+        result = self.db.get_items(member_function=ROLE_SECRETARY_ASSISTANT)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+        
         result = self.db.get_items(member_function=ROLE_TREASURER)
+        if len(result) > max:
+            self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
+            self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+            return False
+        
+        result = self.db.get_items(member_function=ROLE_TREASURER_ASSISTANT)
         if len(result) > max:
             self.session_state[KEY_ALERT] = (MSG_MAX_ROLE, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])

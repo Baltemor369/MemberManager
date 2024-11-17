@@ -1,6 +1,6 @@
 import sqlite3 as sq
 import csv
-from const import *
+from .const import *
 from mods.User import *
 
 class Database:
