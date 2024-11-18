@@ -60,27 +60,7 @@ class Database:
             conn = sq.connect(self.filename)
             cursor = conn.cursor()
             cursor.execute(f"""
-                INSERT INTO {TABLE} (
-                    {DB_FIRST_NAME},
-                    {DB_LAST_NAME},
-                    {DB_BIRTHDAY_LAST_NAME},
-                    {DB_CIVILITY},
-                    {DB_NATIONALITY},
-                    {DB_BIRTHDAY},
-                    {DB_BIRTHDAY_LOCATION},
-                    {DB_START_SUSCRIPTION},
-                    {DB_END_SUSCRIPTION},
-                    {DB_ADDRESS},
-                    {DB_CITY},
-                    {DB_ZIPCODE},
-                    {DB_EMAIL},
-                    {DB_PHONE},
-                    {DB_JOB},
-                    {DB_RELATIONSHIP_SITUATION},
-                    {DB_NB_KIDS},
-                    {DB_MEMBERSHIP_ID},
-                    {DB_MEMBERSHIP_FONCTION},
-                    {DB_ACTIVITY})
+                INSERT INTO {TABLE} ({User().__attr__()})
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """, (user.__list__()[1:]))
             conn.commit()
@@ -113,7 +93,7 @@ class Database:
             cursor = conn.cursor()
             cursor.execute(f"""
                 INSERT INTO {TABLE} ({User().__attr__()})
-                VALUES ({"?," * (len(User().__attr__())-1)}?)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             """, ({user.__list__()})
             )
             conn.commit()
@@ -178,7 +158,6 @@ class Database:
         cursor = conn.cursor()
         cursor.execute(f"SELECT * FROM {TABLE} WHERE {DB_ACTIVITY}='{VAL_ACTIVE}'")
         data = cursor.fetchall()
-
         # get column's names
         column_names = [val for key,val in ATTR.items()]
 
@@ -198,21 +177,15 @@ class Database:
         conn = sq.connect(self.filename)
         cursor = conn.cursor()
 
-        try:
-            # read the CSV file
-            with open(csv_filename, 'r', encoding='utf-8-sig') as csvfile:
-                
-                csvreader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        # read the CSV file
+        with open(csv_filename, 'r', encoding='utf-8-sig') as csvfile:
 
-                # get the column names
-                column_names = next(csvreader)
-                columns = ', '.join(column_names)
-                placeholders = ', '.join('?' * len(column_names))
-                insert_query = f'INSERT INTO {TABLE} ({columns}) VALUES ({placeholders})'
-                for row in csvreader:
-                    cursor.execute(insert_query, row)
-        except Exception as e:
-            print("Erreur lors de l'importation des données : {e}")
+            csvreader = csv.reader(csvfile, delimiter=';', quotechar='"')
+            column_names = next(csvreader)
+            placeholders = ', '.join('?' * len(column_names))
+            insert_query = f'INSERT INTO {TABLE} ({User().__attr__()}) VALUES ({placeholders})'
+            for row in csvreader:
+                cursor.execute(insert_query, row)
             return False
 
         # Sauvegarder les changements et fermer la connexion
