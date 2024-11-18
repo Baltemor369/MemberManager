@@ -192,3 +192,30 @@ class Database:
             # Write down data
             csvwriter.writerows(data)
         conn.close()
+
+    def import_csv(self, csv_filename):
+        # connect to database
+        conn = sq.connect(self.filename)
+        cursor = conn.cursor()
+
+        try:
+            # read the CSV file
+            with open(csv_filename, 'r', encoding='utf-8-sig') as csvfile:
+                
+                csvreader = csv.reader(csvfile, delimiter=';', quotechar='"')
+
+                # get the column names
+                column_names = next(csvreader)
+                columns = ', '.join(column_names)
+                placeholders = ', '.join('?' * len(column_names))
+                insert_query = f'INSERT INTO {TABLE} ({columns}) VALUES ({placeholders})'
+                for row in csvreader:
+                    cursor.execute(insert_query, row)
+        except Exception as e:
+            print("Erreur lors de l'importation des données : {e}")
+            return False
+
+        # Sauvegarder les changements et fermer la connexion
+        conn.commit()
+        conn.close()
+        return True

@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import filedialog, messagebox
 import re
 from tkinter import ttk
 from .const import *
@@ -104,6 +105,10 @@ class Interface:
         # export button
         modify_button = tk.Button(self.root, text=TXT_EXPORT, command=self.exporter, anchor=tk.CENTER, **BUTTON_STYLE)
         modify_button.pack(pady=5, padx=5)
+        
+        # export button
+        import_button = tk.Button(self.root, text=TXT_IMPORT, command=self.open_file_dialog, anchor=tk.CENTER, **BUTTON_STYLE)
+        import_button.pack(pady=5, padx=5)
     
     def add_window(self):
         # clear screen
@@ -745,6 +750,15 @@ class Interface:
 
         # Ajuster le sens du tri
         self.tree.heading(col, command=lambda col=col: self.sortby(col, int(not descending)))
+    
+    def open_file_dialog(self): 
+        csv_filename = filedialog.askopenfilename(title="Choisir un fichier CSV", filetypes=[("CSV files", "*.csv")]) 
+        if csv_filename: 
+            try: 
+                if self.db.import_csv(csv_filename):
+                    messagebox.showinfo("Succès", "Fichier CSV importé avec succès !") 
+            except Exception as e: 
+                messagebox.showerror("Erreur", f"Une erreur est survenue : {e}")
     
     # Fonction de filtrage
     def update_treeview(self, *args):
