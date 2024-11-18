@@ -17,9 +17,9 @@ class User:
                  job:str="", 
                  relationship:str="", 
                  nb_kids:str="", 
+                 member_id:str="",
                  member_function:str="", 
                  activity:str="", 
-                 member_id:str="",
                  ID:int=0):
         
         self.ID = ID

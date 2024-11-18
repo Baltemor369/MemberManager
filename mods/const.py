@@ -69,9 +69,9 @@ ATTR = {
     DB_JOB:"Metier",
     DB_RELATIONSHIP_SITUATION:"Situation familiale",
     DB_NB_KIDS:"Nombre enfants",
+    DB_MEMBERSHIP_ID:"Identifiant",
     DB_MEMBERSHIP_FONCTION:"Fonction",
-    DB_ACTIVITY:"Activité",
-    DB_MEMBERSHIP_ID:"Identifiant"
+    DB_ACTIVITY:"Activité"
 }
 
 # Values

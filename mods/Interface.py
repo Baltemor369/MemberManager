@@ -757,6 +757,7 @@ class Interface:
             try: 
                 if self.db.import_csv(csv_filename):
                     messagebox.showinfo("Succès", "Fichier CSV importé avec succès !") 
+                    self.main_window()
             except Exception as e: 
                 messagebox.showerror("Erreur", f"Une erreur est survenue : {e}")
     
