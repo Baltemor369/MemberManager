@@ -2,6 +2,8 @@ import tkinter as tk
 from tkinter import filedialog, messagebox
 import re
 from tkinter import ttk
+import os
+
 from .const import *
 from mods.User import User
 from mods.Database import Database
@@ -9,10 +11,10 @@ from mods.Tools import format_date, clear_input
 
 class Interface:
     def __init__(self):
-        self.db = Database(FILENAME)
+        self.db = Database(DB_PATH)
         self.root = tk.Tk()
         self.root.title(APP_NAME)
-        # self.root.iconbitmap(ICONNAME)
+        # self.root.iconbitmap(ICON_PATH)
         
         self.root.state('zoomed')
 
@@ -29,7 +31,7 @@ class Interface:
         attributes = User().__attr__()
 
         self.tree["columns"] = attributes[1:]
-        # Définir les colonnes & entêtes
+
         self.tree.column("#0", width=0, stretch=tk.NO)
         self.tree.heading("#0", text="", anchor=tk.CENTER)
         for col in attributes[1:]:
@@ -66,7 +68,7 @@ class Interface:
         search_frame = tk.Frame(self.root, **ROOT_STYLE)
         search_frame.pack(padx=10, pady=10)
 
-        tk.Label(search_frame, text=TXT_SEARCH_LABEL, **LABEL_STYLE).pack(pady=5, side="left")
+        tk.Label(search_frame, text=TXT_SEARCH_LABEL, **SUBTITLE_STYLE).pack(pady=5, side="left")
 
         self.session_state[KEY_SEARCH] = tk.StringVar()
         self.session_state[KEY_SEARCH].trace_add("write", self.update_treeview)
@@ -203,7 +205,7 @@ class Interface:
         email_entry.pack(pady=5)
 
         tk.Label(frameTR, text=ATTR[DB_PHONE], **LABEL_STYLE).pack(pady=5)
-        frame_phone = tk.Frame(frameTR, **ROOT_STYLE)
+        frame_phone = tk.Frame(frameTR, bg=SMOOTHGREEN)
         frame_phone.pack()
 
         phone_entry = tk.Entry(frame_phone)

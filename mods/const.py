@@ -1,5 +1,5 @@
-FILENAME = "members.db"
-ICONNAME="icon.ico"
+DB_PATH = "members.db"
+ICON_PATH="src/icon.ico"
 APP_NAME="Member Manager"
 TABLE="members"
 
@@ -11,11 +11,13 @@ FONT_LABEL = ("Arial", 18, "bold")
 # Colors
 DARKGREY = "#ABABAB"
 LIGHTWHITE = "#EFEFEF"
-GREEN = "#00FF00"
-RED = "#FF0000"
-ORANGE = "#EE9524"
 LIGHTBLUE = "#45ABFF"
 BLACK="#000000"
+LIGHTGREEN = "#56FF61"
+SMOOTHGREEN = "#45CC4E"
+GREEN = "#00BB00"
+ORANGE = "#EE9524"
+RED = "#FF0000"
 
 # Database col
 DB_ID="ID"
@@ -210,20 +212,25 @@ BUTTON_STYLE_LONG = {
 }
 
 ROOT_STYLE = {
-    "bg":LIGHTBLUE
+    "bg":LIGHTGREEN
 }
 
 ALERT_STYLE = {
     "font":FONT_MESSAGE,
-    "bg":LIGHTBLUE
+    "bg":LIGHTGREEN
 }
 
 LABEL_STYLE = {
     "font":FONT_LABEL,
-    "bg":LIGHTBLUE,
+    "bg":SMOOTHGREEN
+}
+
+SUBTITLE_STYLE = {
+    "font":FONT_LABEL,
+    "bg":LIGHTGREEN
 }
 
 TITLE_STYLE = {
     "font":FONT_TITLE,
-    "bg":LIGHTBLUE,
+    "bg":LIGHTGREEN
 }
