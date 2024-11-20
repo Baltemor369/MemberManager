@@ -139,7 +139,7 @@ TXT_ASSOCIATION_INFO="Informations association"
 # List
 LIST_CIVILITY = ["M","Mme","Mlle"]
 LIST_FUNCTION = ["Membre", "Secrétaire adjoint","Secrétaire","Trésorier adjoint", "Trésorier","Vice Président","Président"]
-LIST_RELATIONSHIP = ["Célibataire","Marié(e)","Veuf(ve)"]
+LIST_RELATIONSHIP = ["Célibataire","Marié,e","Veuf,ve"]
 LIST_NATION = [
     "France", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",
     "Antigua and Barbuda", "Argentina", "Armenia", "Australia", "Austria",
