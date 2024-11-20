@@ -10,7 +10,11 @@ def format_date(date_str):
         # Obtenir l'année actuelle
         current_year = datetime.now()
         first_two_digits = str(current_year)[:2]
-        year = first_two_digits + year
+        last_two_digits = str(current_year)[2:4]
+        if year > last_two_digits:
+            year = str(int(first_two_digits)-1) + year
+        else:
+            year =  first_two_digits + year
         if valide_date(day,month,year):
             return f"{day}/{month}/{year}"
         else:

@@ -1,8 +1,8 @@
 import tkinter as tk
-from tkinter import filedialog, messagebox
-import re
-from tkinter import ttk
 import os
+import re
+from tkinter import filedialog, messagebox
+from tkinter import ttk
 
 from .const import *
 from mods.User import User
@@ -14,7 +14,9 @@ class Interface:
         self.db = Database(DB_PATH)
         self.root = tk.Tk()
         self.root.title(APP_NAME)
-        # self.root.iconbitmap(ICON_PATH)
+
+        icon_path = os.path.join(os.path.dirname(__file__), 'icon.ico')
+        self.root.iconbitmap(icon_path)
         
         self.root.state('zoomed')
 
