@@ -1,7 +1,13 @@
+# dossier
 .env
 __pycache__
-*.csv
-test.py
+build
+dist
 .vscode
+# tout type de fichier
+*.csv
 *.mk
 *.db
+*.spec
+# fichier specifique
+test.py
