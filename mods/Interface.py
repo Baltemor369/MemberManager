@@ -641,7 +641,8 @@ class Interface:
             return False
         
         # check nationality
-        if user.nationality not in LIST_NATION:
+        print("#"+user.nationality+"#")
+        if user.nationality.capitalize() not in LIST_NATION:
             self.session_state[KEY_ALERT] = (MSG_INVALID_NATION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
             return False
