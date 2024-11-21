@@ -7,7 +7,7 @@ from tkinter import ttk
 from .const import *
 from mods.User import User
 from mods.Database import Database
-from mods.Tools import format_date, clear_input
+from mods.Tools import format_date, clear_input, format_telephone
 
 class Interface:
     def __init__(self):
@@ -683,6 +683,12 @@ class Interface:
             return False
         
         # check phone number
+        if not(re.match(REGEX_PHONE, user.phone) or user.phone == ""):
+            user.phone = format_telephone(user.phone)
+            if user.phone == -1:
+                self.session_state[KEY_ALERT] = (MSG_INVALID_PHONE, ORANGE)
+                self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
+                return False
         
         # check job
         

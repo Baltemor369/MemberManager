@@ -66,11 +66,10 @@ def clear_input(user_input:str):
     clear_input = re.sub(REGEX_SANITIZED, "", user_input)
     return clear_input
 
-# test format_date
-# print(format_date("310121"))  # 31/01/2021
-# print(format_date("31.01.21"))  # 31/01/2021
-# print(format_date("31012020"))  # 31/01/2020
-# print(format_date("31-01-2020"))  # 31/01/2020
-# print(format_date("31012021A"))  # None
-# print(format_date("31012021 01/01/2021"))  # None
-# print(format_date("01/01/2021"))  # 01/01/2021
+def format_telephone(numero):
+    # Vérifier si le numéro est bien une chaîne de caractères de 10 chiffres
+    if len(numero) != 10 or not numero.isdigit():
+        return -1
+
+    # Ajouter un espace tous les deux paires de chiffres
+    return ' '.join(numero[i:i+2] for i in range(0, len(numero), 2))
