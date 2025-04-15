@@ -18,6 +18,7 @@ SMOOTHGREEN = "#45CC4E"
 GREEN = "#00BB00"
 ORANGE = "#EE9524"
 RED = "#FF0000"
+LIGHTORANGE = "#E4A836"
 
 # Database col
 DB_ID="ID"
@@ -50,6 +51,7 @@ ROLE_TREASURER_ASSISTANT = "Trésorier Adjoint"
 ROLE_TREASURER = "Trésorier"
 ROLE_VICE_PRESIDENT = "Vice Président"
 ROLE_PRESIDENT = "Président"
+ROLE_AMI = "Ami"
 
 # attributs
 ATTR = {
@@ -138,7 +140,7 @@ TXT_ASSOCIATION_INFO="Informations association"
 
 # List
 LIST_CIVILITY = ["M","Mme","Mlle"]
-LIST_FUNCTION = ["Membre", "Secrétaire adjoint","Secrétaire","Trésorier adjoint", "Trésorier","Vice Président","Président"]
+LIST_FUNCTION = ["Membre", "Secrétaire adjoint","Secrétaire","Trésorier adjoint", "Trésorier","Vice Président","Président", "Ami"]
 LIST_RELATIONSHIP = ["Célibataire","Marié,e","Veuf,ve"]
 LIST_NATION = [
     "France", "Afghanistan", "Albania", "Algeria", "Andorra", "Angola",

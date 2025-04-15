@@ -86,11 +86,19 @@ class Interface:
         # update tree data
         for elt in self.db.load_data():
             if elt[-1] == VAL_ACTIVE:
-                self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
+                if elt[-2] == ROLE_AMI:
+                    self.tree.insert("", tk.END, text=elt[0], values=elt[1:], tag=(ROLE_AMI,))
+                else:
+                    self.tree.insert("", tk.END, text=elt[0], values=elt[1:])
+
             else:
-                self.tree.insert("", tk.END, text=elt[0], values=elt[1:], tag=(VAL_INACTIVE,))
+                if elt[-2] == ROLE_AMI:
+                    self.tree.insert("", tk.END, text=elt[0], values=elt[1:], tag=(ROLE_AMI,))
+                else:
+                    self.tree.insert("", tk.END, text=elt[0], values=elt[1:], tag=(VAL_INACTIVE,))
         
         self.tree.tag_configure(VAL_INACTIVE, background="gray")
+        self.tree.tag_configure(ROLE_AMI, background=LIGHTORANGE)
         # display table
         self.tree.pack()
 
@@ -641,7 +649,6 @@ class Interface:
             return False
         
         # check nationality
-        print("#"+user.nationality+"#")
         if user.nationality.capitalize() not in LIST_NATION:
             self.session_state[KEY_ALERT] = (MSG_INVALID_NATION, ORANGE)
             self.alert_label.configure(text=self.session_state[KEY_ALERT][0], fg=self.session_state[KEY_ALERT][1])
