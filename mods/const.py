@@ -150,7 +150,7 @@ LIST_NATION = [
     "Bolivia", "Bosnia and herzegovina", "Botswana", "Brazil", "Brunei",
     "Bulgaria", "Burkina faso", "Burundi", "Cabo verde", "Cambodia",
     "Cameroon", "Canada", "Central african republic", "Chad", "Chile",
-    "China", "Colombia", "Comoros", "Congo", "Congo brazzaville", "Costa rica",
+    "China", "Colombia", "Comoros", "Congo", "Congo brazzaville", "Costa rica", "Cote d ivoire",
     "Croatia", "Cuba", "Cyprus", "Czechia czech republic", "Denmark",
     "Djibouti", "Dominica", "Dominican republic", "Ecuador", "Egypt",
     "El salvador", "Equatorial guinea", "Eritrea", "Estonia", "Eswatini",
@@ -191,6 +191,7 @@ REGEX_EMAIL = r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
 REGEX_DATE_6 = r"(\d{2})[\/\-.]?(\d{2})[\/\-.]?(\d{2})$"
 REGEX_DATE_8 = r"(\d{2})[\/\-.]?(\d{2})[\/\-.]?(\d{4})$"
 REGEX_NAME = r"^[a-zA-Z\s-]+$"
+REGEX_PHONE=r"^06( \d{2}){4}$"
 REGEX_SANITIZED = r"[\'\";\\\n\t|><()&*#%]"
 
 # Key
